@@ -59,7 +59,7 @@ def get_songs_from_spotify(genre, query_words, limit):
     SPOTIFY_API_KEY = get_spotify_api_key()
     headers = {"Authorization": "Bearer {token}".format(token=SPOTIFY_API_KEY)}
 
-    final_query = f"genre: {genre} {' '.join(query_words)}" 
+    final_query = f"genre: {genre} {' '.join(query_words)}"
 
     params = {
         "q": final_query,
@@ -89,4 +89,4 @@ def get_songs_from_spotify(genre, query_words, limit):
             "album_name": album_name,
             "song_link": song_link
         }
-    return(songs_dict)
+    return (songs_dict)
