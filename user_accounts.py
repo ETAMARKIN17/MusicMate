@@ -1,6 +1,7 @@
 import sqlite3
 import hashlib
 
+
 # Connect to SQLite database (create it if it doesn't exist)
 def create_users_table():
     conn = sqlite3.connect('users.db')
@@ -32,10 +33,10 @@ def register_user():
         if username.isdigit():
             print("Username cannot be only numbers. Please choose a different username.")
         else:
-            break    
-    
+            break
+
     password = input("Enter a password: ")
-    #hashed_password = hash_password(password)
+    # hashed_password = hash_password(password)
     hashed_password = password
 
     try:
@@ -48,6 +49,7 @@ def register_user():
 
     conn.close()
 
+
 def login_user():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
@@ -55,7 +57,7 @@ def login_user():
     while True:
         username_or_id = input("Enter your username or user ID: ")
         password = input("Enter your password: ")
-        #hashed_password = hash_password(password)
+        # hashed_password = hash_password(password)
         hashed_password = password
 
         c.execute("SELECT * FROM users WHERE (username=? OR user_id=?) AND password=?", (username_or_id, username_or_id, hashed_password))
@@ -68,6 +70,7 @@ def login_user():
         else:
             print("Incorrect username or password. Please try again.")
 
+
 def show_users():
     conn = sqlite3.connect('users.db')
     c = conn.cursor()
@@ -76,7 +79,7 @@ def show_users():
     users = c.fetchall()
 
     if users:
-        #print("User ID | Username  | Hashed Password")
+        # print("User ID | Username  | Hashed Password")
         print("User ID | Username  | Password")
         print("-------------------------------------")
         for user in users:

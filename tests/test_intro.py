@@ -24,5 +24,6 @@ class UnitTests(unittest.TestCase):
         result = intro_page()
         self.assertEqual(result, 'exit')
 
+
 if __name__ == '__main__':
     unittest.main()

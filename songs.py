@@ -17,7 +17,6 @@ def select_genre():
             print("Invalid genre. Please try again.")
 
 
-
 # Function to prompt user if they want to see a list of genres
 def show_genre_list():
     """
@@ -60,15 +59,14 @@ def get_songs_from_spotify(genre, query_words, limit):
     SPOTIFY_API_KEY = get_spotify_api_key()
     headers = {"Authorization": "Bearer {token}".format(token=SPOTIFY_API_KEY)}
 
-    #final_query = f"{genre} {' '.join(query_words)}"  # Construct query for Spotify API search
-    final_query = f"genre: {genre} {' '.join(query_words)}"  # Alternative query format
+    final_query = f"genre: {genre} {' '.join(query_words)}" 
 
     params = {
         "q": final_query,
         "type": "track",
         "limit": limit
     }
-    
+
     response = requests.get("https://api.spotify.com/v1/search", headers=headers, params=params)
     data = response.json()
 

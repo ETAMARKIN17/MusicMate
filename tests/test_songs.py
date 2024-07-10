@@ -31,5 +31,6 @@ class TestSpotifyFunctions(unittest.TestCase):
         result = list_of_genres()
         self.assertEqual(result, genres)
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -1,5 +1,6 @@
 from user_accounts import *  # Import user account functions
 
+
 def intro_page():
     """
     Displays the home screen with options to login, register, or exit.

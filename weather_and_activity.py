@@ -1,5 +1,6 @@
 import requests
 
+
 # Function to fetch weather forecast for a specified city
 def weather_forecast(api_key):
     """
