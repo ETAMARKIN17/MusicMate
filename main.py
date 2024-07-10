@@ -13,7 +13,7 @@ WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
 GPT_API_KEY = os.getenv('GPT_API_KEY')
 
 
-def intro_page():
+def start():
     """
     Displays the home screen with options to login, register, or exit.
 
@@ -127,7 +127,7 @@ def final_response(query_words, activity, city, weather_stats, songs):
 
 # Main function to execute the WeatherTunes application
 if __name__ == "__main__":
-    status = intro_page()
+    status = start()
     if status == 'exit':
         exit()
     weather_stats, city = weather_forecast(WEATHER_API_KEY)
