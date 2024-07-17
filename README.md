@@ -1,4 +1,4 @@
-# WeatherTunes 🌤️ 🎶
+# NEED TO FIX ALL OF THIS WHEN WE ARE CLOSER TO FINISHING!!!!!!!
 Welcome to WeatherTunes, where you can discover the perfect soundtrack for your day based on the weather and your activities!
 
 ### Table of Contents

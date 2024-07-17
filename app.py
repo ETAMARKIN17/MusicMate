@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from dotenv import load_dotenv
 import os
-from main import *
 from api_key import *
 from songs import *
 from user_accounts import *
-from weather_and_activity import *
+from info_for_songs import *
 from decorators import *
 from save_songs import *
 
@@ -27,9 +26,10 @@ ADMIN_PASSWORD = 'MainAdmin'
 # Route for home page
 @app.route('/')
 def home():
-    session.clear()
+    session.clear()  # Clear session variables
     return render_template('home.html')
 
+# Route for login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -57,6 +57,7 @@ def register():
             flash(error_message, "danger")
     return render_template('register.html')
 
+# Route for user dashboard
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -71,7 +72,7 @@ def dashboard():
 
     return render_template('dashboard.html', user=user, is_admin_user=is_admin_user)
 
-
+# Route for admin dashboard
 @app.route('/admin')
 @login_required
 def admin():
@@ -83,8 +84,7 @@ def admin():
     user = get_user_by_id(user_id)  # Fetch the user details
     return render_template('admin.html', user=user)
 
-
-# Route for viewing all users
+# Route for viewing all users (admin only)
 @app.route('/view_users')
 @login_required
 def view_users():
@@ -95,7 +95,7 @@ def view_users():
     users = get_all_users()
     return render_template('view_users.html', users=users)
 
-# Route for clearing users table (for admin only)
+# Route for clearing users table (admin only)
 @app.route('/clear_users', methods=['GET', 'POST'])
 @login_required
 def clear_users():
@@ -113,13 +113,13 @@ def clear_users():
         return redirect(url_for('dashboard'))
     return render_template('clear_users.html')
 
-
 # Route to start the WeatherTunes process
 @app.route('/start')
 @login_required
 def start():
     return render_template('start.html')
 
+# Route for collecting information for songs
 @app.route('/info_for_songs', methods=['GET', 'POST'])
 @login_required
 def info_for_songs():
@@ -131,12 +131,13 @@ def info_for_songs():
         session['activity'] = activity  # Set activity in session
         session['genre'] = genre  # Set genre in session
         return redirect(url_for('match_the_mood'))
-    session.pop('city', None)  # Reset city if navigating back
-    session.pop('activity', None)  # Reset activity if navigating back
-    session.pop('genre', None)  # Reset genre if navigating back
+    
+    # Reset city, activity, and genre if navigating back
+    session.pop('city', None)
+    session.pop('activity', None)
+    session.pop('genre', None)
     genres = get_spotify_genres()
     return render_template('info_for_songs.html', genres=genres)
-
 
 # Route for matching the mood (finding songs)
 @app.route('/match_the_mood')
@@ -165,7 +166,7 @@ def match_the_mood():
         flash("No songs found. Please try again.", "info")
         return redirect(url_for('dashboard'))
 
-
+# Route for saving a song
 @app.route('/save_a_song', methods=['POST'])
 def save_a_song():
     if request.method == 'POST':
@@ -183,12 +184,14 @@ def save_a_song():
         
         return redirect(url_for('match_the_mood'))
 
+# Route for viewing saved songs
 @app.route('/saved_songs')
 def saved_songs():
     user_id = session.get('user_id')
     saved_songs = get_saved_songs(user_id)
     return render_template('saved_songs.html', saved_songs=saved_songs)
 
+# Route for deleting a saved song
 @app.route('/delete_saved_song/<int:song_id>', methods=['POST'])
 def delete_saved_song(song_id):
     user_id = session.get('user_id')
@@ -208,12 +211,12 @@ def delete_saved_song(song_id):
 def discover():
     return render_template('discover.html')
 
-
+# Route for logging out
 @app.route('/logout')
 def logout():
     session.clear()  # Clear all session variables
     return redirect(url_for('home'))
 
-
+# Run the Flask application
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

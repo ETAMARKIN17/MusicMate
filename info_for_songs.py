@@ -1,29 +1,35 @@
+import requests
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
 from songs import *  # Import functions from songs.py
-from weather_and_activity import *  # Import functions from weather_and_activity.py
-from user_accounts import *  # Import user account functions
 
 # Get API keys from environment variables
 load_dotenv()
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
 GPT_API_KEY = os.getenv('GPT_API_KEY')
 
+
+# Function to fetch weather forecast for a specified city
+def weather_forecast(city, api_key):
+    url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        json_response = response.json()
+        city_from_response = json_response['location']['name']
+        region_from_response = json_response['location']['region']
+        fahrenheit = json_response['current']['temp_f']
+        weather = json_response['current']['condition']['text']
+        return (fahrenheit, weather), city_from_response
+    else:
+        print("Error, status code:", response.status_code)
+        print("Please try again with a valid city name")
+
+
 # Function to generate query words using GPT-3 based on weather and activity
 def gpt_query_words(weather_stats, activity, api_key):
-    """
-    Generates query words for Spotify API search based on weather and user's activity using GPT-3.
-
-    Args:
-    - weather_stats (list): Contains temperature and weather condition.
-    - activity (str): User's current activity.
-    - api_key (str): API key for GPT-3.
-
-    Returns:
-    - String containing query words.
-    """
     client = OpenAI(api_key=api_key)
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -33,6 +39,7 @@ def gpt_query_words(weather_stats, activity, api_key):
         ]
     )
     return completion.choices[0].message.content
+
 
 # Fetch weather and songs
 def get_weather_and_songs(city, activity, genre):

@@ -67,8 +67,3 @@ def delete_saved_song_by_id(user_id, song_id):
 
 # Call this function once to create the table if it doesn't exist
 create_saved_songs_table()
-
-# For testing purposes
-if __name__ == '__main__':
-    # Add test cases or operations here to verify functionality
-    pass
