@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - WeatherTunes</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home_page.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('home') }}">WeatherTunes</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content container">
+            <h1>Welcome to WeatherTunes</h1>
+            <p>Your Personalized Music Companion.</p>
+            <a href="{{ url_for('login') }}" class="btn btn-custom btn-lg">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-custom btn-lg">Register</a>
+        </div>
+        <span class="music-note note1" draggable="true">♬</span>
+        <span class="music-note note2" draggable="true">♫</span>
+        <span class="music-note note3" draggable="true">♫</span>
+        <span class="music-note note4" draggable="true">♬</span>
+        <span class="music-note note5" draggable="true">♪</span>
+        <span class="music-note note6" draggable="true">♬</span>
+        <span class="music-note note7" draggable="true">♫</span>
+        <span class="music-note note8" draggable="true">♪</span>
+        <span class="music-note note9" draggable="true">♪</span>
+    </section>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let activeDragElement = null;
+            let initialX;
+            let initialY;
+
+            document.addEventListener("mousedown", function (event) {
+                if (event.target.classList.contains("music-note")) {
+                    activeDragElement = event.target;
+                    initialX = event.clientX - activeDragElement.getBoundingClientRect().left;
+                    initialY = event.clientY - activeDragElement.getBoundingClientRect().top;
+                    activeDragElement.style.cursor = "grabbing";
+                }
+            });
+
+            document.addEventListener("mousemove", function (event) {
+                if (activeDragElement) {
+                    event.preventDefault();
+                    let newX = event.clientX - initialX;
+                    let newY = event.clientY - initialY;
+                    activeDragElement.style.left = newX + "px";
+                    activeDragElement.style.top = newY + "px";
+                }
+            });
+
+            document.addEventListener("mouseup", function () {
+                if (activeDragElement) {
+                    activeDragElement.style.cursor = "grab";
+                    activeDragElement = null;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

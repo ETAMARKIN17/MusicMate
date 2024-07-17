@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Clear Users - WeatherTunes{% endblock %}
+
+{% block content %}
+    <h1>Clear Users</h1>
+    <p>Are you sure you want to clear all users?</p>
+    <form action="{{ url_for('clear_users') }}" method="post">
+        <button type="submit" class="btn btn-danger">Clear Users</button>
+    </form>
+{% endblock %}

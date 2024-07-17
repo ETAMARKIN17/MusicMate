@@ -1,0 +1,97 @@
+body {
+    font-family: sans-serif;
+    background-image: url('/static/images/main_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    margin: 0;
+    display: flex; /* Add flexbox properties */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff; /* Dark text color */
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.alert {
+    margin-top: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.container {
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+    padding: 80px;
+    border-radius: 200px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    color: white; /* White text */
+    max-width: 1000px;
+    max-height: 800px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); /* Text shadow for emphasis */
+}
+
+form {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+form label {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+form input[type="text"], 
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ced4da; /* Light border */
+    border-radius: 4px;
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.4); /* Dark button background */
+    border: none;
+    border-radius: 4px;
+    color: white; /* White text */
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Darken button on hover */
+}
+
+.alert {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 10px;
+    font-size: 1rem;
+    color: #000; /* Black text */
+    background-color: rgba(255, 255, 255, 0.8); /* White background with transparency */
+    border-radius: 4px;
+}

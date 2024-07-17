@@ -4,6 +4,25 @@ import sys
 from api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
 from spotify_genres import genres  # List of genres from Spotify
 
+def get_spotify_token():
+    auth_url = 'https://accounts.spotify.com/api/token'
+    auth_response = requests.post(auth_url, {
+        'grant_type': 'client_credentials',
+        'client_id': SPOTIFY_CLIENT_ID,
+        'client_secret': SPOTIFY_CLIENT_SECRET,
+    })
+
+    auth_response_data = auth_response.json()
+    return auth_response_data['access_token']
+
+def get_spotify_genres():
+    token = get_spotify_token()
+    genre_url = 'https://api.spotify.com/v1/recommendations/available-genre-seeds'
+    response = requests.get(genre_url, headers={
+        'Authorization': f'Bearer {token}'
+    })
+    genres = response.json()['genres']
+    return genres
 
 def select_genre():
     while True:
@@ -15,7 +34,6 @@ def select_genre():
             return genre
         else:
             print("Invalid genre. Please try again.")
-
 
 # Function to prompt user if they want to see a list of genres
 def show_genre_list():
@@ -34,7 +52,6 @@ def show_genre_list():
         else:
             print("Invalid Entry: enter 'y' or 'n'")
 
-
 # Function to return list of available genres
 def list_of_genres():
     """
@@ -44,7 +61,6 @@ def list_of_genres():
     - List of genres.
     """
     return genres
-
 
 def get_songs_from_spotify(genre, query_words, limit):
     """
@@ -56,8 +72,8 @@ def get_songs_from_spotify(genre, query_words, limit):
     Returns:
     - None
     """
-    SPOTIFY_API_KEY = get_spotify_api_key()
-    headers = {"Authorization": "Bearer {token}".format(token=SPOTIFY_API_KEY)}
+    SPOTIFY_API_KEY = get_spotify_token()
+    headers = {"Authorization": f"Bearer {SPOTIFY_API_KEY}"}
 
     final_query = f"genre: {genre} {' '.join(query_words)}"
 
@@ -89,4 +105,4 @@ def get_songs_from_spotify(genre, query_words, limit):
             "album_name": album_name,
             "song_link": song_link
         }
-    return (songs_dict)
+    return songs_dict

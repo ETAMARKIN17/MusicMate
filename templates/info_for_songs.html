@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Select info to fetch songs{% endblock %}
+
+{% block content %}
+    <h1>Info For Songs</h1>
+    <form method="POST" action="{{ url_for('info_for_songs') }}">
+        <label for="city">Enter City:</label><br>
+        <input type="text" id="city" name="city" placeholder="Enter city" required><br><br>
+
+        <label for="activity">Enter Activity:</label><br>
+        <input type="text" id="activity" name="activity" placeholder="Enter activity" required><br><br>
+
+        <label for="genre">Select Genre:</label><br>
+        <select id="genre" name="genre" required>
+            {% for genre in genres %}
+                <option value="{{ genre }}">{{ genre }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Get Songs">
+    </form>
+{% endblock %}

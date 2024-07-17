@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Start WeatherTunes - WeatherTunes{% endblock %}
+
+{% block content %}
+    <h1>Start WeatherTunes</h1>
+    <p>Let's find the perfect music for your mood based on the weather and your activity.</p>
+    <a href="{{ url_for('info_for_songs') }}">Get Started</a>
+{% endblock %}

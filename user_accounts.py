@@ -1,119 +1,104 @@
 import sqlite3
 import hashlib
+from dotenv import load_dotenv
+import os
 
+# Load environment variables from .env file
+load_dotenv()
 
-# Connect to SQLite database (create it if it doesn't exist)
-def create_users_table():
+# Admin credentials
+ADMIN_USERNAME = 'Admin'
+ADMIN_PASSWORD = 'MainAdmin'
+
+# Function to connect to SQLite database
+def get_db_connection():
     conn = sqlite3.connect('users.db')
-    c = conn.cursor()
+    conn.row_factory = sqlite3.Row  # Allows fetching rows as dictionaries
+    return conn
 
-    # Create users table
+# Create users table if not exists
+def create_users_table():
+    conn = get_db_connection()
+    c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS users (
                    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
                    username TEXT UNIQUE NOT NULL,
                    password TEXT NOT NULL
                )''')
-
-    # Commit changes and close connection
     conn.commit()
     conn.close()
 
-
+# Function to hash a password
 def hash_password(password):
-    # Create a SHA-256 hash of the password
     return hashlib.sha256(password.encode()).hexdigest()
 
-
-def register_user():
-    conn = sqlite3.connect('users.db')
+# Function to register a new user
+def register_user(username, password):
+    if username.isdigit():
+        return None, "Username cannot be empty. Please choose a valid username."
+    if len(username) < 5:
+        return None, "Username must be longer than 5 characters. Please choose a valid username."
+    
+    conn = get_db_connection()
     c = conn.cursor()
-
-    while True:
-        username = input("Enter a username: ")
-        if username.isdigit():
-            print("Username cannot be only numbers. Please choose a different username.")
-        else:
-            break
-
-    password = input("Enter a password: ")
-    # hashed_password = hash_password(password)
-    hashed_password = password
-
+    hashed_password = hash_password(password)
     try:
         c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
         conn.commit()
-        user_id = c.lastrowid  # Get the ID of the newly created user
-        print(f"Registration successful! Your user ID is {user_id}.")
+        user_id = c.lastrowid
+        conn.close()
+        return user_id, None  # Return user ID and no error message if successful
     except sqlite3.IntegrityError:
-        print("Username already exists. Please choose a different username.")
+        conn.close()
+        return None, "Username already exists. Please choose a different username."
 
+# Function to authenticate a user
+def login_user(username_or_id, password):
+    conn = get_db_connection()
+    c = conn.cursor()
+    hashed_password = hash_password(password)
+    c.execute("SELECT * FROM users WHERE (username=? OR user_id=?) AND password=?", (username_or_id, username_or_id, hashed_password))
+    user = c.fetchone()
     conn.close()
+    return user
 
-
-def login_user():
-    conn = sqlite3.connect('users.db')
+# Function to fetch a user by user ID
+def get_user_by_id(user_id):
+    conn = get_db_connection()
     c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE user_id=?", (user_id,))
+    user = c.fetchone()
+    conn.close()
+    return user
 
-    while True:
-        username_or_id = input("Enter your username or user ID: ")
-        password = input("Enter your password: ")
-        # hashed_password = hash_password(password)
-        hashed_password = password
-
-        c.execute("SELECT * FROM users WHERE (username=? OR user_id=?) AND password=?", (username_or_id, username_or_id, hashed_password))
-        user = c.fetchone()
-
-        if user:
-            print(f"Welcome back, {user[1]}!")
-            conn.close()
-            return user  # Return user info for further use
-        else:
-            print("Incorrect username or password. Please try again.")
-
-
-def show_users():
-    conn = sqlite3.connect('users.db')
+# Function to fetch all users (for testing or admin purposes)
+def get_all_users():
+    conn = get_db_connection()
     c = conn.cursor()
-
     c.execute("SELECT * FROM users")
     users = c.fetchall()
-
-    if users:
-        # print("User ID | Username  | Hashed Password")
-        print("User ID | Username  | Password")
-        print("-------------------------------------")
-        for user in users:
-            print(f"{user[0]:7} | {user[1]:8} | {user[2]}")
-    else:
-        print("No users found in the database.")
-
     conn.close()
+    return users
 
-
-def clear_whole_db():
-    check1 = input("ARE YOU SURE YOU WANT TO CLEAR THE WHOLE TABLE?? (Enter 'Yes' if yes): ")
-    if check1 == 'Yes':
-        check2 = input("ARE YOU SURE?? (Enter 'YES I AM SURE' if yes): ")
-        if check2 == 'YES I AM SURE':
-            check3 = input("LAST CHECK!!!! (Enter 'i aM 100% PosITiVe I waNT tO clEaR' if yes): ")
-            if check3 == 'i aM 100% PosITiVe I waNT tO clEaR':
-                print('CONFIRMATION SUCCESS: Clearing Now')
-                conn = sqlite3.connect('users.db')
-                c = conn.cursor()
-
-                # Drop users table if it exists
-                c.execute('DROP TABLE IF EXISTS users')
-
-                # Commit changes and close connection
-                conn.commit()
-                conn.close()
-            else:
-                print("Did not type exactly not clearing")
-        else:
-            print("Did not type exactly not clearing")
+# Function to clear the entire users table (for development purposes)
+def clear_users_table():
+    check_confirmation = input("ARE YOU SURE YOU WANT TO CLEAR THE WHOLE TABLE? (Enter 'yes' to confirm): ").lower()
+    if check_confirmation == 'yes':
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute('DROP TABLE IF EXISTS users')
+        conn.commit()
+        conn.close()
+        print('Users table cleared successfully.')
     else:
-        print("Did not type exactly not clearing")
+        print('Operation aborted.')
 
+# Function to check if user is admin
+def is_admin(user_id):
+    user = get_user_by_id(user_id)
+    if user and user['username'] == ADMIN_USERNAME and user['password'] == hash_password(ADMIN_PASSWORD):
+        return True
+    return False
 
 # Call this function once to create the table if it doesn't exist
 create_users_table()

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - WeatherTunes{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ user.username }}!</p>
+    <p><a href="{{ url_for('start') }}">Start WeatherTunes</a></p>
+    <p><a href="{{ url_for('saved_songs') }}">View Saved Songs</a></p>
+    {% if is_admin_user %}
+        <p><a href="{{ url_for('admin') }}">Admin Dashboard</a></p>
+    {% endif %}
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+{% endblock %}
