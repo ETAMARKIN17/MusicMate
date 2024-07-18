@@ -125,7 +125,7 @@ def match_the_day():
     query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
     
     # Get songs from Spotify API
-    songs = get_songs_from_spotify(genre, query_words, limit=5)
+    songs = recommend_songs(query_words, genre,)
     
     if songs:
         return render_template('match_the_day.html', songs=songs, query_words=query_words, activity=activity, city=city_name, weather_stats=weather_stats)
