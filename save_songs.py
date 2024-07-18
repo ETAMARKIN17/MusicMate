@@ -1,6 +1,8 @@
 import sqlite3
 from dotenv import load_dotenv
 import os
+from songs import *
+
 
 # Load environment variables from .env file
 load_dotenv()

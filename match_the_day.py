@@ -5,6 +5,7 @@ from openai import OpenAI
 from get_spotify_api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
 from songs import *  # Import functions from songs.py
 
+
 # Get API keys from environment variables
 load_dotenv()
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
@@ -61,3 +62,12 @@ def recommend_songs(query_words, genre):
             "popularity": song["popularity"]
         }
     return random_5_songs_dict
+
+
+# Get songs from activity and weather feature
+def get_songs_from_activity(city, activity, genre):
+    weather_stats, city_name = weather_forecast(city, WEATHER_API_KEY)
+    query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
+    songs = recommend_songs(query_words, genre)
+
+    return songs, weather_stats  # get activity from session in app.py, use all this for match_the_mood.html

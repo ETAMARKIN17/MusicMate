@@ -5,6 +5,8 @@ from get_spotify_api_key import *
 from songs import *
 from user_accounts import *
 from match_the_day import *
+from match_the_song import *
+from match_the_mood import *
 from decorators import *
 from save_songs import *
 
@@ -96,8 +98,13 @@ def match_the_day_info():
         session['city'] = city  # Set city in session
         session['activity'] = activity  # Set activity in session
         session['genre'] = genre  # Set genre in session
-        return redirect(url_for('match_the_day'))
-    
+
+        #return redirect(url_for('song_matches'))
+        songs, weather_stats = get_songs_from_activity(city, activity, genre)
+
+        return render_template('song_matches.html', songs=songs, city=city, activity=activity, weather_stats=weather_stats)
+
+
     # Reset city, activity, and genre if navigating back
     session.pop('city', None)
     session.pop('activity', None)
@@ -106,32 +113,78 @@ def match_the_day_info():
     return render_template('match_the_day_info.html', genres=genres)
 
 
-# Route for matching the day (finding songs)
-@app.route('/match_the_day')
+# Route for collecting information for songs
+@app.route('/match_the_mood_info', methods=['GET', 'POST'])
 @login_required
-def match_the_day():
-    if 'city' not in session or 'activity' not in session or 'genre' not in session:
-        flash("Please fill in all necessary info first.", "info")
-        return redirect(url_for('match_the_day_info'))
-    
-    city = session['city']
-    activity = session['activity']
-    genre = session['genre']
-    
-    # Get weather stats
-    weather_stats, city_name = weather_forecast(city, WEATHER_API_KEY)
-    
-    # Get query words from GPT-3
-    query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
-    
-    # Get songs from Spotify API
-    songs = recommend_songs(query_words, genre)
-    
-    if songs:
-        return render_template('match_the_day.html', songs=songs, query_words=query_words, activity=activity, city=city_name, weather_stats=weather_stats)
-    else:
-        flash("No songs found. Please try again.", "info")
-        return redirect(url_for('dashboard'))
+def match_the_mood_info():
+    if request.method == 'POST':
+        mood = request.form['mood']
+        genre = request.form['genre']
+        session['mood'] = mood  # Set mood in session
+        session['genre'] = genre  # Set genre in session
+
+        songs, mood = get_songs_from_mood(mood, genre)
+
+        #print(songs)
+        return render_template('song_matches.html', songs=songs, mood=mood)
+
+    # Reset if navigating back
+    session.pop('mood', None)
+    session.pop('genre', None)
+    genres = get_spotify_genres()
+    return render_template('match_the_mood_info.html', genres=genres)
+
+
+# Route for collecting information for songs
+@app.route('/match_the_song_info', methods=['GET', 'POST'])
+@login_required
+def match_the_song_info():
+    if request.method == 'POST':
+        original_song = request.form['song']
+        session['original_song'] = original_song
+
+        songs = get_similar_songs(original_song)
+
+        return render_template('song_matches.html', songs=songs, original_song=original_song)
+
+    # Reset if navigating back
+    session.pop('original_song', None)
+    genres = get_spotify_genres()
+    return render_template('match_the_song_info.html', genres=genres)
+
+
+@app.route('/song_matches', methods=['GET','POST'])  # redirect to dashboard
+@login_required
+def song_matches():  # make this reusable to display similar songs and mood songs and activity songs
+    if request.method == 'POST':
+        user_id = session.get('user_id')
+        song_name = request.form['song_name']
+        artist_name = request.form['artist_name']
+        album_name = request.form['album_name']
+        song_link = request.form['song_link']
+
+        song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
+        if song_id:
+            return {"status":"success","message":"Song saved successfully"},200
+        else:
+            return {"status":"error","message":"Song failed to save. Please try again"}, 500
+
+    previous_page = session.get('previous_page')
+    if previous_page == 'match_the_day_info':
+        city = session.get('city')
+        activity = session.get('activity')
+        weather_stats = session.get('weather_stats')
+        songs = get_songs_from_activity(city, activity, genre)
+        return render_template('song_matches.html', songs=songs, city=city, activity=activity, weather_stats=weather_stats)
+    elif previous_page == 'match_the_mood_info':
+        mood = session.get('mood')
+        genre = session.get('genre')
+        songs = get_songs_from_mood(mood, genre)
+        return render_template('song_matches.html', songs=songs, mood=mood)
+    elif previous_page == 'match_the_song_info':
+        original_song = session.get('original_song')
+        songs = get_similar_songs(original_song)
+        return render_template('song_matches.html', songs=songs, original_song=original_song)
 
 
 # Route for saving a song
@@ -146,12 +199,10 @@ def save_a_song():
         
         song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
         if song_id:
-            flash("Song saved successfully!", "success")
+            return {"status":"success","message":"Song saved successfully"},200
         else:
-            flash("Failed to save song. Please try again.", "danger")
+            return {"status":"error","message":"Song failed to save. Please try again"}, 500
         
-        return redirect(url_for('match_the_day'))
-
 
 # Route for viewing saved songs
 @app.route('/saved_songs')

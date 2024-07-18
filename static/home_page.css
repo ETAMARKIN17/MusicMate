@@ -1,5 +1,6 @@
 body {
     font-family: sans-serif;
+    overflow: hidden;
 }
 
 .hero {
@@ -52,7 +53,6 @@ body {
 
 .nav-item {
     font-size: 1.1rem;
-
 }
 
 .navbar-brand img {
@@ -67,43 +67,71 @@ body {
     font-size: 4rem;
     color: black;
     position: absolute;
-    animation: float 15s infinite ease-in-out alternate;
-    transition: color 0.3s;
-    cursor: grab; /* Cursor changes to hand when hovering over notes */
-    user-select: none; /* Prevent text selection while dragging */
-    z-index: 0; /* Ensure notes are behind the hero content */
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    z-index: 0;
 }
 
-.music-note:active {
-    cursor: grabbing; /* Cursor changes to closed hand while dragging */
+.note1 { bottom: 15%; left: 15%; animation: floatCircle1 15s infinite; }
+.note2 { bottom: 8%; right: 5%; animation: floatCircle2 18s infinite; }
+.note3 { top: 12%; left: 5%; animation: floatCircle3 20s infinite; }
+.note4 { top: 6%; right: 17%; animation: floatCircle4 22s infinite; }
+.note5 { top: 30%; right: 6%; animation: floatCircle5 25s infinite; }
+.note6 { top: 60%; right: 22%; animation: floatCircle6 28s infinite; }
+.note7 { bottom: 10%; right: 47%; animation: floatCircle7 30s infinite; }
+.note8 { bottom: 45%; left: 8%; animation: floatCircle8 35s infinite; }
+.note9 { top: 15%; left: 35%; animation: floatCircle9 40s infinite; }
+
+@keyframes floatCircle1 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(100px, 100px); }
+    100% { transform: translate(0, 0); }
 }
 
-.music-note:hover {
-    color: white;
-    font-size: 6rem;
+@keyframes floatCircle2 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-100px, 100px); }
+    100% { transform: translate(0, 0); }
 }
 
-.note1 { bottom: 15%; left: 15%; animation-delay: 0s; }
-.note2 { bottom: 8%; right: 5%; animation-delay: 1s; }
-.note3 { top: 12%; left: 5%; animation-delay: 2s; }
-.note4 { top: 6%; right: 17%; animation-delay: 3s; }
-.note5 { top: 30%; right: 6%; animation-delay: 4s; }
-.note6 { top: 60%; right: 22%; animation-delay: 5s; }
-.note7 { bottom: 10%; right: 47%; animation-delay: 6s; }
-.note8 { bottom: 45%; left: 8%; animation-delay: 7s; }
-.note9 { top: 15%; left: 35%; animation-delay: 8s; }
+@keyframes floatCircle3 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(100px, -100px); }
+    100% { transform: translate(0, 0); }
+}
 
-@keyframes float {
-    0%, 100% {
-        transform: translate(0, 0);
-    }
-    25% {
-        transform: translate(-20px, -20px);
-    }
-    50% {
-        transform: translate(20px, 20px);
-    }
-    75% {
-        transform: translate(-10px, -10px);
-    }
+@keyframes floatCircle4 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-100px, -100px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes floatCircle5 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(80px, 80px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes floatCircle6 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-80px, 80px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes floatCircle7 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(120px, -120px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes floatCircle8 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-120px, -120px); }
+    100% { transform: translate(0, 0); }
+}
+
+@keyframes floatCircle9 {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(90px, 90px); }
+    100% { transform: translate(0, 0); }
 }

@@ -29,6 +29,61 @@ def get_spotify_genres():
     return genres
 
 
+def get_similar(song, limit):
+    SPOTIFY_API_KEY = get_spotify_token()
+    headers = {"Authorization": f"Bearer {SPOTIFY_API_KEY}"}
+
+# FIRST API CALL, GRAB ID OF USER'S SONG:
+
+    params = {
+        "q": song,
+        "type": "track",
+        "limit": 1
+    }
+
+    response = requests.get("https://api.spotify.com/v1/search", headers=headers, params=params)
+    data = response.json()
+
+    if "error" in data:
+        # Handle API error response
+        print(f"Error from Spotify API: {data['error']['message']}")
+        sys.exit(0)
+
+    # pprint.pprint(data)
+    song_id = data['tracks']['items'][0]['id']
+
+# SECOND API CALL, FINDING SONGS SIMILAR TO USER ENTERED SONG:
+
+    params = {
+        "seed_tracks": song_id,
+        "limit": limit
+    }
+
+    response = requests.get("https://api.spotify.com/v1/recommendations", headers=headers, params=params)
+    data = response.json()
+
+    if "error" in data:
+        # Handle API error response
+        print(f"Error from Spotify API: {data['error']['message']}")
+        sys.exit(0)
+    
+    songs_dict = {}
+    # pprint.pprint(data)
+    for i, item in enumerate(data['tracks']):
+        # Extract song details from API response
+        song_name = item['name']
+        artist_name = item['artists'][0]['name']
+        album_name = item['album']['name']
+        song_link = item['external_urls']['spotify']
+        songs_dict[i + 1] = {
+            "song_name": song_name,
+            "artist_name": artist_name,
+            "album_name": album_name,
+            "song_link": song_link
+        }
+
+    return songs_dict
+
 
 # Function to fetch playlist from Spotify based on query words and genre
 def get_playlist_from_spotify(query_words, genre):

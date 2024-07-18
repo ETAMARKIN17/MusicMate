@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Select info to fetch songs{% endblock %}
+
+{% block content %}
+    <h1>Info For Similar Songs</h1>
+    <form method="POST" action="{{ url_for('match_the_song_info') }}">
+        <label for="city">Enter a song you'd like to get similar music for (Feel free to include artist):</label><br>
+        <input type="text" id="song" name="song" placeholder="Enter song" required><br><br>
+
+        <input type="submit" value="Get Songs">
+    </form>
+{% endblock %}
