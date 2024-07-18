@@ -41,7 +41,7 @@ def gpt_query_words(weather_stats, activity, api_key):
     return completion.choices[0].message.content
 
 
-# Fetch weather and songs
+# Fetch weather and songs using query words
 def get_weather_and_songs(city, activity, genre):
     weather_stats, city_name = weather_forecast(city, WEATHER_API_KEY)
     query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
