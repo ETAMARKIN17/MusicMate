@@ -48,5 +48,5 @@ def recommend_songs(query_words, genre):
 
 def get_songs_from_mood(mood, genre):
     query_words = gpt_query_words_mood(mood, GPT_API_KEY)
-    songs = get_songs_from_spotify(query_words, genre)
+    songs = recommend_songs(query_words, genre)
     return songs, mood  # return these to be used by match_the_mood.html

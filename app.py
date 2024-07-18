@@ -163,12 +163,11 @@ def song_matches():  # make this reusable to display similar songs and mood song
         album_name = request.form['album_name']
         song_link = request.form['song_link']
 
-
         song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
         if song_id:
-            flash("Song saved successfully!", "success")
+            return {"status":"success","message":"Song saved successfully"},200
         else:
-            flash("Failed to save song. Please try again.", "danger")
+            return {"status":"error","message":"Song failed to save. Please try again"}, 500
 
     previous_page = session.get('previous_page')
     if previous_page == 'match_the_day_info':
@@ -200,12 +199,10 @@ def save_a_song():
         
         song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
         if song_id:
-            flash("Song saved successfully!", "success")
+            return {"status":"success","message":"Song saved successfully"},200
         else:
-            flash("Failed to save song. Please try again.", "danger")
-
-        return redirect(url_for('song_matches'))
-
+            return {"status":"error","message":"Song failed to save. Please try again"}, 500
+        
 
 # Route for viewing saved songs
 @app.route('/saved_songs')
