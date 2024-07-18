@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Home - WeatherTunes{% endblock %}
+{% block title %}Discover{% endblock %}
 
 {% block content %}
-    <h1>Welcome to WeatherTunes!</h1>
-    <p>This is the discover page.</p>
+    <h1>ADD DIFFERENT FEATURES HERE</h1>
+    <p>Let's find the perfect music for your mood based on the weather and your activity.</p>
+    <a href="{{ url_for('match_the_day_info') }}">Match The Day 🌤️</a>
+
+    <p>Let's find the perfect music for your mood.</p>
+    <a href="{{ url_for('match_the_mood_info') }}">Match your mood</a>
+
+    <p>Let's find a similar song.</p>
+    <a href="{{ url_for('match_the_song_info') }}">Find Similar Songs</a>
 {% endblock %}

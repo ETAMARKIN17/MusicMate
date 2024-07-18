@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Matching Songs - WeatherTunes{% endblock %}
+{% block title %}Matching Songs{% endblock %}
 
 {% block content %}
+
     <h1>Here's what we got:</h1>
+
 
     {% if mood %}
         <h2>Matching Songs for {{ mood }} Mood</h2>
@@ -31,6 +33,15 @@
         {% endfor %}
     </ul>
 
+
+    {% if mood %}
+        <a href="{{ url_for('match_the_mood_info') }}">Change the parameters</a><br>
+    {% elif activity and city and weather_stats %}
+        <a href="{{ url_for('match_the_day_info') }}">Change the parameters</a><br>
+    {% elif original_song %}
+        <a href="{{ url_for('match_the_song_info') }}">Change the parameters</a><br>
+    {% endif%}
+    <a href="{{ url_for('discover') }}">Change the feature</a><br>
     <a href="{{ url_for('saved_songs') }}">View Saved Songs</a><br>
     <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
 {% endblock %}

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - WeatherTunes</title>
+    <title>Login - MusicMate</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='login_register.css') }}">
 </head>
@@ -37,8 +37,8 @@
         {% endwith %}
 
         <form method="post">
-            <label for="username_or_id">Username or ID:</label>
-            <input type="text" name="username_or_id" required><br>
+            <label for="username">Username:</label>
+            <input type="text" name="username" required><br>
             <label for="password">Password:</label>
             <input type="password" name="password" required><br>
             <button type="submit">Login</button>
