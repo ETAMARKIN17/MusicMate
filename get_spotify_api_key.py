@@ -9,6 +9,7 @@ load_dotenv()
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 
+
 def get_spotify_api_key():
     # Spotify API credentials
     CLIENT_ID = SPOTIFY_CLIENT_ID
