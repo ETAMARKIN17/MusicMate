@@ -10,8 +10,8 @@
                 {% for song in saved_songs %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <h5>{{ song['song_name'] }}</h5>
-                            <p>{{ song['artist_name'] }}{% if song['album_name'] %} - {{ song['album_name'] }}{% endif %}</p>
+                            <h5 style="color: black;">{{ song['song_name'] }}</h5>
+                            <p style="color: black;">{{ song['artist_name'] }}{% if song['album_name'] %} - {{ song['album_name'] }}{% endif %}</p>
                             {% if song['song_link'] %}
                                 <a href="{{ song['song_link'] }}" target="_blank" class="btn btn-sm btn-outline-primary">Listen</a>
                             {% else %}
@@ -28,8 +28,9 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p>No saved songs yet.</p>
+            <p style="color: black;">No saved songs yet.</p>
         {% endif %}
         <a href="{{ url_for('dashboard') }}" class="btn btn-primary mt-3">Back to Dashboard</a>
     </div>
 {% endblock %}
+

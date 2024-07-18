@@ -178,11 +178,11 @@ def save_a_song():
         
         song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
         if song_id:
-            flash("Song saved successfully!", "success")
+            return {"status":"success","message":"Song saved successfully"},200
         else:
-            flash("Failed to save song. Please try again.", "danger")
+            return {"status":"error","message":"Song failed to save. Please try again"}, 500
         
-        return redirect(url_for('match_the_mood'))
+        
 
 # Route for viewing saved songs
 @app.route('/saved_songs')
