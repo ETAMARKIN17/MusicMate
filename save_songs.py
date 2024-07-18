@@ -1,6 +1,8 @@
 import sqlite3
 from dotenv import load_dotenv
 import os
+from songs import *
+from info_for_songs import *
 
 # Load environment variables from .env file
 load_dotenv()
@@ -64,6 +66,20 @@ def delete_saved_song_by_id(user_id, song_id):
         print(f"Error deleting song: {e}")
         conn.close()
         return False
+
+def get_songs_activity(city, activity, genre):
+    weather_stats, city_name = weather_forecast(city, WEATHER_API_KEY)
+    
+    # Get query words from GPT-3
+    query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
+
+    # Get songs from Spotify API
+    songs = get_songs_from_spotify(genre, query_words, limit=5)
+
+    # if theres an error return something bad
+    return songs, weather_stats
+
+
 
 # Call this function once to create the table if it doesn't exist
 create_saved_songs_table()

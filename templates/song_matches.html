@@ -3,17 +3,24 @@
 {% block title %}Matching Songs - WeatherTunes{% endblock %}
 
 {% block content %}
-    <h1>Match the Mood</h1>
+    <h1>Here's what we got:</h1>
 
-    <h2>Matching Songs for {{ activity }} in {{ city }}</h2>
-    <p>Weather: {{ weather_stats[0] }}°F, {{ weather_stats[1] }}</p>
+    {% if mood %}
+        <h2>Matching Songs for {{ mood }} Mood</h2>
+    {% elif activity and city and weather_stats %}
+        <h2>Matching Songs for {{ activity }} in {{ city }}</h2>
+        <p>Weather: {{ weather_stats[0] }}°F, {{ weather_stats[1] }}</p>
+    {% elif original_song %}
+        <h2>Matching Similar Songs to {{ original_song }}</h2>
+    {% endif%}
 
     <ul>
         {% for key, song in songs.items() %}
             <li>{{ song['song_name'] }} by {{ song['artist_name'] }} from the album {{ song['album_name'] }}
             <br>
             <a href="{{ song['song_link'] }}" target="_blank">Listen on Spotify</a>
-            <form action="{{ url_for('save_a_song') }}" method="POST">
+            <form action="{{ url_for('song_matches') }}" method="POST">
+              <input type ="hidden" name="song_index" value="{{ key }}">
               <input type="hidden" name="song_name" value="{{ song['song_name'] }}">
               <input type="hidden" name="artist_name" value="{{ song['artist_name'] }}">
               <input type="hidden" name="album_name" value="{{ song['album_name'] }}">
@@ -24,9 +31,6 @@
         {% endfor %}
     </ul>
 
-    <p>Query Words Used: {{ query_words }}</p>
-    
-    <a href="{{ url_for('info_for_songs') }}">Change the parameters</a><br>
     <a href="{{ url_for('saved_songs') }}">View Saved Songs</a><br>
     <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Select info to fetch songs{% endblock %}
+
+{% block content %}
+    <h1>Info For Mood</h1>
+    <form method="POST" action="{{ url_for('info_for_mood') }}">
+        <label for="city">Enter your mood, and why you're feeling that way if you'd like:</label><br>
+        <input type="text" id="mood" name="mood" placeholder="Enter mood" required><br><br>
+
+        <label for="genre">Select Genre:</label><br>
+        <select id="genre" name="genre" required>
+            {% for genre in genres %}
+                <option value="{{ genre }}">{{ genre }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Get Songs">
+    </form>
+{% endblock %}

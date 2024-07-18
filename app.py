@@ -23,11 +23,13 @@ GPT_API_KEY = os.getenv('GPT_API_KEY')
 ADMIN_USERNAME = 'Admin'
 ADMIN_PASSWORD = 'MainAdmin'
 
+
 # Route for home page
 @app.route('/')
 def home():
     session.clear()  # Clear session variables
     return render_template('home.html')
+
 
 # Route for login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -43,6 +45,7 @@ def login():
             flash("Invalid username or password. Please try again.", "danger")
     return render_template('login.html')
 
+
 # Route for registration page
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -56,6 +59,7 @@ def register():
         else:
             flash(error_message, "danger")
     return render_template('register.html')
+
 
 # Route for user dashboard
 @app.route('/dashboard')
@@ -72,6 +76,7 @@ def dashboard():
 
     return render_template('dashboard.html', user=user, is_admin_user=is_admin_user)
 
+
 # Route for admin dashboard
 @app.route('/admin')
 @login_required
@@ -84,6 +89,7 @@ def admin():
     user = get_user_by_id(user_id)  # Fetch the user details
     return render_template('admin.html', user=user)
 
+
 # Route for viewing all users (admin only)
 @app.route('/view_users')
 @login_required
@@ -94,6 +100,7 @@ def view_users():
 
     users = get_all_users()
     return render_template('view_users.html', users=users)
+
 
 # Route for clearing users table (admin only)
 @app.route('/clear_users', methods=['GET', 'POST'])
@@ -113,16 +120,18 @@ def clear_users():
         return redirect(url_for('dashboard'))
     return render_template('clear_users.html')
 
+
 # Route to start the WeatherTunes process
 @app.route('/start')
 @login_required
 def start():
     return render_template('start.html')
 
+
 # Route for collecting information for songs
-@app.route('/info_for_songs', methods=['GET', 'POST'])
+@app.route('/info_for_activity', methods=['GET', 'POST'])
 @login_required
-def info_for_songs():
+def info_for_activity():
     if request.method == 'POST':
         city = request.form['city']
         activity = request.form['activity']
@@ -130,41 +139,96 @@ def info_for_songs():
         session['city'] = city  # Set city in session
         session['activity'] = activity  # Set activity in session
         session['genre'] = genre  # Set genre in session
-        return redirect(url_for('match_the_mood'))
-    
+
+        #return redirect(url_for('song_matches'))
+        songs, weather_stats = get_songs_from_activity(city, activity, genre)
+
+        return render_template('song_matches.html', songs=songs, city=city, activity=activity, weather_stats=weather_stats)
+
     # Reset city, activity, and genre if navigating back
     session.pop('city', None)
     session.pop('activity', None)
     session.pop('genre', None)
     genres = get_spotify_genres()
-    return render_template('info_for_songs.html', genres=genres)
+    return render_template('info_for_activity.html', genres=genres)
 
-# Route for matching the mood (finding songs)
-@app.route('/match_the_mood')
+
+# Route for collecting information for songs
+@app.route('/info_for_mood', methods=['GET', 'POST'])
 @login_required
-def match_the_mood():
-    if 'city' not in session or 'activity' not in session or 'genre' not in session:
-        flash("Please fill in all necessary info first.", "info")
-        return redirect(url_for('info_for_songs'))
+def info_for_mood():
+    if request.method == 'POST':
+        mood = request.form['mood']
+        genre = request.form['genre']
+        session['mood'] = mood  # Set mood in session
+        session['genre'] = genre  # Set genre in session
+
+        songs, mood = get_songs_from_mood(mood, genre)
+
+        #print(songs)
+        return render_template('song_matches.html', songs=songs, mood=mood)
+
+    # Reset if navigating back
+    session.pop('mood', None)
+    session.pop('genre', None)
+    genres = get_spotify_genres()
+    return render_template('info_for_mood.html', genres=genres)
+
+
+# Route for collecting information for songs
+@app.route('/info_for_similar', methods=['GET', 'POST'])
+@login_required
+def info_for_similar():
+    if request.method == 'POST':
+        original_song = request.form['song']
+        session['original_song'] = original_song
+
+        songs = get_similar_songs(original_song)
+        
+        return render_template('song_matches.html', songs=songs, original_song=original_song)
+
+    # Reset if navigating back
+    session.pop('original_song', None)
+    genres = get_spotify_genres()
+    return render_template('info_for_similar.html', genres=genres)
+
+
+@app.route('/song_matches', methods=['GET','POST'])  # redirect to dashboard
+@login_required
+def song_matches():  # make this reusable to display similar songs and mood songs and activity songs
+    if request.method == 'POST':
+        user_id = session.get('user_id')
+        song_name = request.form['song_name']
+        artist_name = request.form['artist_name']
+        album_name = request.form['album_name']
+        song_link = request.form['song_link']
+        
+        song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
+        if song_id:
+            flash("Song saved successfully!", "success")
+        else:
+            flash("Failed to save song. Please try again.", "danger")
     
-    city = session['city']
-    activity = session['activity']
-    genre = session['genre']
-    
-    # Get weather stats
-    weather_stats, city_name = weather_forecast(city, WEATHER_API_KEY)
-    
-    # Get query words from GPT-3
-    query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
-    
-    # Get songs from Spotify API
-    songs = get_songs_from_spotify(genre, query_words, limit=5)
-    
-    if songs:
-        return render_template('match_the_mood.html', songs=songs, query_words=query_words, activity=activity, city=city_name, weather_stats=weather_stats)
+    previous_page = session.get('previous_page')
+    if previous_page == 'info_for_activity':
+        city = session.get('city')
+        activity = session.get('activity')
+        weather_stats = session.get('weather_stats')
+        songs = get_songs_from_activity(city, activity, genre)
+        return render_template('song_matches.html', songs=songs, city=city, activity=activity, weather_stats=weather_stats)
+    elif previous_page == 'info_for_mood':
+        mood = session.get('mood')
+        genre = session.get('genre')
+        songs = get_songs_from_mood(mood, genre)
+        return render_template('song_matches.html', songs=songs, mood=mood)
+    elif previous_page == 'info_for_similar':
+        original_song = session.get('original_song')
+        songs = get_similar_songs(original_song)
+        return render_template('song_matches.html', songs=songs, original_song=original_song)
     else:
-        flash("No songs found. Please try again.", "info")
+        flash("No songs found. Please try again.", "danger")
         return redirect(url_for('dashboard'))
+
 
 # Route for saving a song
 @app.route('/save_a_song', methods=['POST'])
@@ -182,7 +246,8 @@ def save_a_song():
         else:
             flash("Failed to save song. Please try again.", "danger")
         
-        return redirect(url_for('match_the_mood'))
+        return redirect(url_for('song_matches'))
+
 
 # Route for viewing saved songs
 @app.route('/saved_songs')
@@ -190,6 +255,7 @@ def saved_songs():
     user_id = session.get('user_id')
     saved_songs = get_saved_songs(user_id)
     return render_template('saved_songs.html', saved_songs=saved_songs)
+
 
 # Route for deleting a saved song
 @app.route('/delete_saved_song/<int:song_id>', methods=['POST'])
@@ -205,17 +271,20 @@ def delete_saved_song(song_id):
         flash("User not found.", "danger")
     return redirect(url_for('saved_songs'))
 
+
 # Route for discovering new music (not implemented here, just for structure)
 @app.route('/discover')
 @login_required
 def discover():
     return render_template('discover.html')
 
+
 # Route for logging out
 @app.route('/logout')
 def logout():
     session.clear()  # Clear all session variables
     return redirect(url_for('home'))
+
 
 # Run the Flask application
 if __name__ == '__main__':
