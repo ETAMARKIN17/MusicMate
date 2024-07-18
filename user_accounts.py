@@ -6,15 +6,13 @@ import os
 # Load environment variables from .env file
 load_dotenv()
 
-# Admin credentials
-ADMIN_USERNAME = 'Admin'
-ADMIN_PASSWORD = 'MainAdmin'
 
 # Function to connect to SQLite database
 def get_db_connection():
     conn = sqlite3.connect('users.db')
     conn.row_factory = sqlite3.Row  # Allows fetching rows as dictionaries
     return conn
+
 
 # Create users table if not exists
 def create_users_table():
@@ -28,9 +26,11 @@ def create_users_table():
     conn.commit()
     conn.close()
 
+
 # Function to hash a password
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
 
 # Function to register a new user
 def register_user(username, password):
@@ -52,6 +52,7 @@ def register_user(username, password):
         conn.close()
         return None, "Username already exists. Please choose a different username."
 
+
 # Function to authenticate a user
 def login_user(username_or_id, password):
     conn = get_db_connection()
@@ -62,6 +63,7 @@ def login_user(username_or_id, password):
     conn.close()
     return user
 
+
 # Function to fetch a user by user ID
 def get_user_by_id(user_id):
     conn = get_db_connection()
@@ -71,34 +73,6 @@ def get_user_by_id(user_id):
     conn.close()
     return user
 
-# Function to fetch all users (for testing or admin purposes)
-def get_all_users():
-    conn = get_db_connection()
-    c = conn.cursor()
-    c.execute("SELECT * FROM users")
-    users = c.fetchall()
-    conn.close()
-    return users
-
-# Function to clear the entire users table (for development purposes)
-def clear_users_table():
-    check_confirmation = input("ARE YOU SURE YOU WANT TO CLEAR THE WHOLE TABLE? (Enter 'yes' to confirm): ").lower()
-    if check_confirmation == 'yes':
-        conn = get_db_connection()
-        c = conn.cursor()
-        c.execute('DROP TABLE IF EXISTS users')
-        conn.commit()
-        conn.close()
-        print('Users table cleared successfully.')
-    else:
-        print('Operation aborted.')
-
-# Function to check if user is admin
-def is_admin(user_id):
-    user = get_user_by_id(user_id)
-    if user and user['username'] == ADMIN_USERNAME and user['password'] == hash_password(ADMIN_PASSWORD):
-        return True
-    return False
 
 # Call this function once to create the table if it doesn't exist
 create_users_table()

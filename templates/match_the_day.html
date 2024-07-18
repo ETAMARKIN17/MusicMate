@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Matching Songs - WeatherTunes{% endblock %}
+{% block title %}Matching Songs{% endblock %}
 
 {% block content %}
-    <h1>Match the Mood</h1>
+    <h1>Match the Day</h1>
 
     <h2>Matching Songs for {{ activity }} in {{ city }}</h2>
     <p>Weather: {{ weather_stats[0] }}°F, {{ weather_stats[1] }}</p>
@@ -26,7 +26,8 @@
 
     <p>Query Words Used: {{ query_words }}</p>
     
-    <a href="{{ url_for('info_for_songs') }}">Change the parameters</a><br>
+    <a href="{{ url_for('match_the_day_info') }}">Change the parameters</a><br>
+    <a href="{{ url_for('discover') }}">Change the feature</a><br>
     <a href="{{ url_for('saved_songs') }}">View Saved Songs</a><br>
     <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
 {% endblock %}

@@ -5,11 +5,13 @@ import os
 # Load environment variables from .env file
 load_dotenv()
 
+
 # Function to connect to SQLite database
 def get_db_connection():
     conn = sqlite3.connect('users.db')
     conn.row_factory = sqlite3.Row  # Allows fetching rows as dictionaries
     return conn
+
 
 # Create saved_songs table if not exists
 def create_saved_songs_table():
@@ -27,6 +29,7 @@ def create_saved_songs_table():
     conn.commit()
     conn.close()
 
+
 # Function to save a song for a user
 def save_song(user_id, song_name, artist_name, album_name, song_link):
     conn = get_db_connection()
@@ -42,6 +45,7 @@ def save_song(user_id, song_name, artist_name, album_name, song_link):
         conn.close()
         return None
 
+
 # Function to retrieve saved songs for a user
 def get_saved_songs(user_id):
     conn = get_db_connection()
@@ -50,6 +54,7 @@ def get_saved_songs(user_id):
     saved_songs = c.fetchall()
     conn.close()
     return saved_songs
+
 
 # Function to delete a saved song by its ID
 def delete_saved_song_by_id(user_id, song_id):
@@ -64,6 +69,7 @@ def delete_saved_song_by_id(user_id, song_id):
         print(f"Error deleting song: {e}")
         conn.close()
         return False
+
 
 # Call this function once to create the table if it doesn't exist
 create_saved_songs_table()

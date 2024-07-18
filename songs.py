@@ -1,7 +1,8 @@
 import os
 import requests
 import sys
-from api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+from get_spotify_api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+
 
 # Function to get Spotify token
 def get_spotify_token():
@@ -15,6 +16,7 @@ def get_spotify_token():
     auth_response_data = auth_response.json()
     return auth_response_data['access_token']
 
+
 # Function to get available genres from Spotify
 def get_spotify_genres():
     token = get_spotify_token()
@@ -24,6 +26,7 @@ def get_spotify_genres():
     })
     genres = response.json()['genres']
     return genres
+
 
 # Function to get songs from Spotify based on genre and query words
 def get_songs_from_spotify(genre, query_words, limit):
