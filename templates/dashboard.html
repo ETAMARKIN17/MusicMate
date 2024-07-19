@@ -3,9 +3,20 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Welcome, {{ user.username }}!</p>
-    <p><a href="{{ url_for('discover') }}">Discover New Songs</a></p>
-    <p><a href="{{ url_for('saved_songs') }}">View Saved Songs</a></p>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    <h1 class="top-center-text">Welcome, {{ user.username }}!</h1>
+
+    <div class="dashboard">
+        <div class="feature-magnify">
+            <img src="{{ url_for('static', filename='images/magnify.jpg') }}" alt="Discover New Songs">
+            <a href="{{ url_for('discover') }}" class="btn btn-custom btn-lg">Discover New Songs</a>
+        </div>
+        <div class="feature-heart">
+            <img src="{{ url_for('static', filename='images/heart.jpg') }}" alt="View Saved Songs">
+            <a href="{{ url_for('saved_songs') }}" class="btn btn-custom btn-lg">View Saved Songs</a>
+        </div>
+    </div>
+
+    <div class="bottom-center-text">
+        <a href="{{ url_for('logout') }}" class="btn btn-custom btn-lg">Logout</a>
+    </div>
 {% endblock %}
