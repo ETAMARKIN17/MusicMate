@@ -99,11 +99,10 @@ def match_the_day_info():
         session['activity'] = activity  # Set activity in session
         session['genre'] = genre  # Set genre in session
 
-        #return redirect(url_for('song_matches'))
+        # Return redirect(url_for('song_matches'))
         songs, weather_stats = get_songs_from_activity(city, activity, genre)
 
         return render_template('song_matches.html', songs=songs, city=city, activity=activity, weather_stats=weather_stats)
-
 
     # Reset city, activity, and genre if navigating back
     session.pop('city', None)
@@ -125,7 +124,7 @@ def match_the_mood_info():
 
         songs, mood = get_songs_from_mood(mood, genre)
 
-        #print(songs)
+        # Print(songs)
         return render_template('song_matches.html', songs=songs, mood=mood)
 
     # Reset if navigating back
@@ -153,7 +152,7 @@ def match_the_song_info():
     return render_template('match_the_song_info.html', genres=genres)
 
 
-@app.route('/song_matches', methods=['GET','POST'])  # redirect to dashboard
+@app.route('/song_matches', methods=['GET', 'POST'])  # redirect to dashboard
 @login_required
 def song_matches():  # make this reusable to display similar songs and mood songs and activity songs
     if request.method == 'POST':
@@ -165,9 +164,9 @@ def song_matches():  # make this reusable to display similar songs and mood song
 
         song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
         if song_id:
-            return {"status":"success","message":"Song saved successfully"},200
+            return {"status": "success", "message": "Song saved successfully"}, 200
         else:
-            return {"status":"error","message":"Song failed to save. Please try again"}, 500
+            return {"status": "error", "message": "Song failed to save. Please try again"}, 500
 
     previous_page = session.get('previous_page')
     if previous_page == 'match_the_day_info':
@@ -196,13 +195,13 @@ def save_a_song():
         artist_name = request.form['artist_name']
         album_name = request.form['album_name']
         song_link = request.form['song_link']
-        
+
         song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
         if song_id:
-            return {"status":"success","message":"Song saved successfully"},200
+            return {"status": "success", "message": "Song saved successfully"}, 200
         else:
-            return {"status":"error","message":"Song failed to save. Please try again"}, 500
-        
+            return {"status": "error", "message": "Song failed to save. Please try again"}, 500
+
 
 # Route for viewing saved songs
 @app.route('/saved_songs')
