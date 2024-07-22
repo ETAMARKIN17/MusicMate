@@ -125,6 +125,10 @@ def match_the_day_info():
         # Return redirect(url_for('song_matches'))
         songs, weather_stats = get_songs_from_activity(city, activity, genre)
 
+        if songs is None or weather_stats is None:
+            flash("Failed to get song recommendations. Please try again.", "error")
+            return redirect(url_for('match_the_day_info'))
+
         return render_template('song_matches.html', songs=songs, city=city, activity=activity, weather_stats=weather_stats)
 
     # Reset city, activity, and genre if navigating back
@@ -147,7 +151,13 @@ def match_the_mood_info():
 
         songs, mood = get_songs_from_mood(mood, genre)
 
-        # Print(songs)
+        if not songs:  # If songs is an empty dictionary
+            flash("No tracks found. Please Try Again!", "error")
+
+        if songs is None:
+            flash("Failed to get song recommendations. Please try again.", "error")
+            return redirect(url_for('match_the_mood_info'))
+
         return render_template('song_matches.html', songs=songs, mood=mood)
 
     # Reset if navigating back
@@ -166,6 +176,10 @@ def match_the_song_info():
         session['original_song'] = original_song
 
         songs = get_similar_songs(original_song)
+
+        if songs is None:
+            flash("Failed to get similar songs. Please try again.", "error")
+            return redirect(url_for('match_the_song_info'))
 
         return render_template('song_matches.html', songs=songs, original_song=original_song)
 

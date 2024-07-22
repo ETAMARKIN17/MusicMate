@@ -2,6 +2,7 @@ import os
 import random
 import requests
 import sys
+from flask import flash
 from get_spotify_api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
 
 
@@ -46,8 +47,10 @@ def get_similar(song, limit):
 
     if "error" in data:
         # Handle API error response
-        print(f"Error from Spotify API: {data['error']['message']}")
-        sys.exit(0)
+         flash(f"Sorry, there was an error. Please try again. Error from Spotify API: {data['error']['message']}","error")
+         return None 
+       
+        
 
     # pprint.pprint(data)
     song_id = data['tracks']['items'][0]['id']
@@ -64,11 +67,10 @@ def get_similar(song, limit):
 
     if "error" in data:
         # Handle API error response
-        print(f"Error from Spotify API: {data['error']['message']}")
-        sys.exit(0)
+        return None 
 
     songs_dict = {}
-    # pprint.pprint(data)
+
     for i, item in enumerate(data['tracks']):
         # Extract song details from API response
         song_name = item['name']
@@ -104,12 +106,12 @@ def get_playlist_from_spotify(query_words, genre):
     data = response.json()
 
     if "error" in data:
-        print(f"Error from Spotify API: {data['error']['message']}")
-        return None
+         flash(f"Sorry, there was an error. Please try again. Error from Spotify API: {data['error']['message']}","error")
+         return None
 
     playlists = data['playlists']['items']
     if not playlists:
-        print("No playlists found matching the criteria.")
+        flash(f"Sorry, there was an error. Please try again. Error from Spotify API: No playlist found that matches critera","error")
         return None
 
     selected_playlist = random.choice(playlists)
@@ -124,23 +126,32 @@ def get_playlist_from_spotify(query_words, genre):
     playlist_data = response.json()
 
     if "error" in playlist_data:
-        print(f"Error from Spotify API: {playlist_data['error']['message']}")
+        flash(f"Sorry, there was an error. Please try again. Error from Spotify API: {playlist_data['error']['message']}","error")
         return None
-
+        
     tracks = playlist_data['items']
     return tracks
 
 
 # Function to get songs from Spotify based on genre and query words
 def get_songs_from_playlist(genre, tracks):
+    if tracks is None:
+        flash("Sorry, No tracks found.", "error")
+        print("Flash message set: No tracks found or there was an error retrieving the playlist.")
+        return {}
     songs_dict = {}
     for i, track in enumerate(tracks):
         song_name = track['track']['name']
         artist_name = track['track']['artists'][0]['name']
         album_name = track['track']['album']['name']
-        song_link = track['track']['external_urls']['spotify']
+        # Handle the case where 'external_urls' might not have the 'spotify' key
+        song_link = track['track'].get('external_urls', {}).get('spotify', 'URL not available')
         uri = track['track']['uri']
-        album_cover = track['track']['album']['images'][0]['url']
+        # Handle the case where album images might be empty or missing
+        album_cover = None
+        if 'images' in track['track']['album'] and len(track['track']['album']['images']) > 0:
+            album_cover = track['track']['album']['images'][0].get('url', None)
+
         popularity = track['track']['popularity']
 
         songs_dict[i + 1] = {

@@ -29,6 +29,8 @@ def weather_forecast(city, api_key):
     else:
         print("Error, status code:", response.status_code)
         print("Please try again with a valid city name")
+        return None
+        
 
 
 # Function to generate query words using GPT-3 based on weather, activity, and genre
