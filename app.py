@@ -35,7 +35,7 @@ def login():
         user = login_user(username, password)
         if user:
             session['user_id'] = user['user_id']  # Store user ID in session
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('get_spotify_info'))
         else:
             flash("Invalid username or password. Please try again.", "danger")
     return render_template('login.html')
@@ -91,6 +91,7 @@ def refresh_token_route():
 # Route for user dashboard
 @app.route('/dashboard')
 @login_required
+@spotify_login_required
 def dashboard():
     user_id = session['user_id']
     user = get_user_by_id(user_id)
@@ -106,6 +107,7 @@ def dashboard():
 # Route to access the features page
 @app.route('/discover')
 @login_required
+@spotify_login_required
 def discover():
     return render_template('discover.html')
 
@@ -113,6 +115,7 @@ def discover():
 # Route for collecting information for the match the day feature
 @app.route('/match_the_day_info', methods=['GET', 'POST'])
 @login_required
+@spotify_login_required
 def match_the_day_info():
     if request.method == 'POST':
         city = request.form['city']
@@ -142,6 +145,7 @@ def match_the_day_info():
 # Route for collecting information for songs
 @app.route('/match_the_mood_info', methods=['GET', 'POST'])
 @login_required
+@spotify_login_required
 def match_the_mood_info():
     if request.method == 'POST':
         mood = request.form['mood']
@@ -170,6 +174,7 @@ def match_the_mood_info():
 # Route for collecting information for songs
 @app.route('/match_the_song_info', methods=['GET', 'POST'])
 @login_required
+@spotify_login_required
 def match_the_song_info():
     if request.method == 'POST':
         original_song = request.form['song']
@@ -191,6 +196,7 @@ def match_the_song_info():
 
 @app.route('/song_matches', methods=['GET', 'POST'])  # redirect to dashboard
 @login_required
+@spotify_login_required
 def song_matches():  # make this reusable to display similar songs and mood songs and activity songs
     if request.method == 'POST':
         user_id = session.get('user_id')
@@ -245,6 +251,8 @@ def save_a_song():
 
 # Route for viewing saved songs
 @app.route('/saved_songs', methods=['POST','GET'])
+@login_required
+@spotify_login_required
 def saved_songs():
     user_id = session.get('user_id')
 
