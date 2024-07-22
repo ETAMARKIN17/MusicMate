@@ -8,6 +8,7 @@ from match_the_day import *
 from match_the_song import *
 from match_the_mood import *
 from decorators import *
+from playlist_feature import *
 from save_songs import *
 
 # Load environment variables from .env file
@@ -16,10 +17,6 @@ load_dotenv()
 # Initialize Flask application
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
-
-# Get API keys from environment variables
-WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
-GPT_API_KEY = os.getenv('GPT_API_KEY')
 
 
 # Route for home page
@@ -63,6 +60,32 @@ def register():
         else:
             flash(error_message, "danger")
     return render_template('register.html')
+
+
+@app.route('/get_spotify_info')
+def get_spotify_info():
+    auth_url = get_spotify_auth_url()
+    return redirect(auth_url)
+
+
+@app.route('/callback')
+def callback():
+    if 'error' in request.args:
+        return jsonify({'error': request.args['error']})
+    
+    if 'code' in request.args:
+        token_info = get_token_info(request.args['code'])
+
+        session['access_token'] = token_info['access_token']
+        session['refresh_token'] = token_info['refresh_token']
+        session['expires_at'] = datetime.now().timestamp() + token_info['expires_in']
+
+        return redirect(url_for('dashboard'))
+
+
+@app.route('/refresh_token')
+def refresh_token_route():
+    return refresh_token()
 
 
 # Route for user dashboard
@@ -162,8 +185,9 @@ def song_matches():  # make this reusable to display similar songs and mood song
         artist_name = request.form['artist_name']
         album_name = request.form['album_name']
         song_link = request.form['song_link']
+        uri = request.form['uri']
 
-        song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
+        song_id = save_song(user_id, song_name, artist_name, album_name, song_link, uri)
         if song_id:
             return {"status":"success","message":"Song saved successfully"},200
         else:
@@ -196,8 +220,9 @@ def save_a_song():
         artist_name = request.form['artist_name']
         album_name = request.form['album_name']
         song_link = request.form['song_link']
+        uri = request.form['uri']
         
-        song_id = save_song(user_id, song_name, artist_name, album_name, song_link)
+        song_id = save_song(user_id, song_name, artist_name, album_name, song_link,uri)
         if song_id:
             return {"status":"success","message":"Song saved successfully"},200
         else:
@@ -205,11 +230,57 @@ def save_a_song():
         
 
 # Route for viewing saved songs
-@app.route('/saved_songs')
+@app.route('/saved_songs', methods=['POST','GET'])
 def saved_songs():
     user_id = session.get('user_id')
+
+    if 'access_token' not in session:
+        return redirect(url_for('dashboard'))
+
+    if datetime.now().timestamp() > session['expires_at']:
+        return redirect(url_for('refresh_token'))
+
+    # get saved songs from db
     saved_songs = get_saved_songs(user_id)
-    return render_template('saved_songs.html', saved_songs=saved_songs)
+    # get playlists from db, should store playlist name and id
+    playlists = get_user_playlists()
+
+    return render_template('saved_songs.html', saved_songs=saved_songs, playlists=playlists)
+
+
+@app.route('/create_playlist', methods=['POST'])
+def create_playlist():
+    if not request.is_json:
+        return jsonify({"success": False, "message": "Request must be JSON"}), 400
+
+    data = request.get_json()  # Getting playlist info from popup box
+    name = data.get('name')
+    description = data.get('description', '')
+    public = data.get('public', False)
+
+    response = create_playlist_helper(name, description, public)  # Uses Spotify API to create playlist for user
+    if 'id' in response:
+        return jsonify({"success": True, "message": "Playlist created successfully"}), 200
+    else:
+        return jsonify({"success": False, "message": "Failed to create playlist"}), 500
+
+
+@app.route('/add_to_playlist', methods=['POST'])
+def add_to_playlist():
+    if request.method != 'POST':
+        return jsonify({"success": False, "message": "Request must be JSON"}), 400
+
+    playlist_id = request.form.get('playlist_id')
+    song_uri = request.form.get('song_uri')
+
+    
+    result = add_to_playlist_helper(playlist_id, song_uri)
+    if result:
+        flash("Success.", "yay")
+    else:
+        flash("Failed.", "danger")
+
+    return redirect(url_for("saved_songs"))
 
 
 # Route for deleting a saved song

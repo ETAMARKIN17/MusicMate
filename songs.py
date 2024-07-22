@@ -75,11 +75,13 @@ def get_similar(song, limit):
         artist_name = item['artists'][0]['name']
         album_name = item['album']['name']
         song_link = item['external_urls']['spotify']
+        uri = item['uri']
         songs_dict[i + 1] = {
             "song_name": song_name,
             "artist_name": artist_name,
             "album_name": album_name,
-            "song_link": song_link
+            "song_link": song_link,
+            "uri": uri
         }
 
     return songs_dict
@@ -137,6 +139,7 @@ def get_songs_from_playlist(genre, tracks):
         artist_name = track['track']['artists'][0]['name']
         album_name = track['track']['album']['name']
         song_link = track['track']['external_urls']['spotify']
+        uri = track['track']['uri']
         album_cover = track['track']['album']['images'][0]['url']
         popularity = track['track']['popularity']
 
@@ -146,6 +149,9 @@ def get_songs_from_playlist(genre, tracks):
             "album_name": album_name,
             "song_link": song_link,
             "album_cover": album_cover,
-            "popularity": popularity
+            "popularity": popularity,
+            "uri": uri,
         }
+
+    print(uri)
     return songs_dict

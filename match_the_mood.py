@@ -41,7 +41,8 @@ def recommend_songs(query_words, genre):
             "album_name": song["album_name"],
             "song_link": song["song_link"],
             "album_cover": song["album_cover"],
-            "popularity": song["popularity"]
+            "popularity": song["popularity"],
+            "uri": song["uri"]
         }
     return random_5_songs_dict
 
