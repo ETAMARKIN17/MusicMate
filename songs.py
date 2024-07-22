@@ -66,7 +66,7 @@ def get_similar(song, limit):
         # Handle API error response
         print(f"Error from Spotify API: {data['error']['message']}")
         sys.exit(0)
-    
+
     songs_dict = {}
     # pprint.pprint(data)
     for i, item in enumerate(data['tracks']):
@@ -111,10 +111,10 @@ def get_playlist_from_spotify(query_words, genre):
     if not playlists:
         print("No playlists found matching the criteria.")
         return None
-  
+
     selected_playlist = random.choice(playlists)
     playlist_id = selected_playlist['id']
-    
+
     # Get tracks from the playlist
     playlist_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
     params = {

@@ -13,6 +13,7 @@ GPT_API_KEY = os.getenv('GPT_API_KEY')
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 
+
 # Function to fetch weather forecast for a specified city
 def weather_forecast(city, api_key):
     url = f'http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}'
@@ -45,12 +46,12 @@ def gpt_query_words(weather_stats, activity, api_key):
 
 def recommend_songs(query_words, genre):
     playlist = get_playlist_from_spotify(query_words, genre)
-    
+
     songs = get_songs_from_playlist(genre, playlist)
 
     all_songs = list(songs.values())
     random_5_songs = random.sample(all_songs, k=min(5, len(all_songs)))
-    
+
     random_5_songs_dict = {}
     for i, song in enumerate(random_5_songs):
         random_5_songs_dict[i + 1] = {

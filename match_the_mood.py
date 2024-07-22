@@ -27,12 +27,12 @@ def gpt_query_words_mood(mood, api_key):
 
 def recommend_songs(query_words, genre):
     playlist = get_playlist_from_spotify(query_words, genre)
-    
+
     songs = get_songs_from_playlist(genre, playlist)
 
     all_songs = list(songs.values())
     random_5_songs = random.sample(all_songs, k=min(5, len(all_songs)))
-    
+
     random_5_songs_dict = {}
     for i, song in enumerate(random_5_songs):
         random_5_songs_dict[i + 1] = {

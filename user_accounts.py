@@ -38,7 +38,7 @@ def register_user(username, password):
         return None, "Username cannot be empty. Please choose a valid username."
     if len(username) < 5:
         return None, "Username must be longer than 5 characters. Please choose a valid username."
-    
+
     conn = get_db_connection()
     c = conn.cursor()
     hashed_password = hash_password(password)
