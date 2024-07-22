@@ -31,11 +31,11 @@ def recommend_songs(query_words, genre):
     songs = get_songs_from_playlist(genre, playlist)
 
     all_songs = list(songs.values())
-    random_5_songs = random.sample(all_songs, k=min(5, len(all_songs)))
+    random_5_songs = random.sample(all_songs, k=min(6, len(all_songs)))
 
-    random_5_songs_dict = {}
+    random_6_songs_dict = {}
     for i, song in enumerate(random_5_songs):
-        random_5_songs_dict[i + 1] = {
+        random_6_songs_dict[i + 1] = {
             "song_name": song["song_name"],
             "artist_name": song["artist_name"],
             "album_name": song["album_name"],
@@ -44,7 +44,7 @@ def recommend_songs(query_words, genre):
             "popularity": song["popularity"],
             "uri": song["uri"]
         }
-    return random_5_songs_dict
+    return random_6_songs_dict
 
 
 def get_songs_from_mood(mood, genre):

@@ -3,11 +3,22 @@
 {% block title %}Select info to fetch songs{% endblock %}
 
 {% block content %}
-    <h1>Info For Similar Songs</h1>
+    <div class="center-text">
+    <h1>Welcome to Match your Song</h1>
+    <h2>Find a similar song to your song!</h2>
     <form method="POST" action="{{ url_for('match_the_song_info') }}">
-        <label for="city">Enter a song you'd like to get similar music for (Feel free to include artist):</label><br>
-        <input type="text" id="song" name="song" placeholder="Enter song" required><br><br>
+        <label for="city">Enter a song (Feel free to include artist):</label><br>
+        <input type="text"  class="styled-input" id="song" name="song" placeholder="Enter song" required><br><br>
 
         <input type="submit" value="Get Songs">
     </form>
+    <span class="music-note note1" draggable="true">🎶</span>
+        <span class="music-note note2" draggable="true">🎸</span>
+        <span class="music-note note3" draggable="true">🎹</span>
+        <span class="music-note note4" draggable="true">🎤</span>
+        <span class="music-note note5" draggable="true">🎷</span>
+        <span class="music-note note6" draggable="true">🎺</span>
+        <span class="music-note note7" draggable="true">🎻</span>
+        <span class="music-note note8" draggable="true">🥁</span>
+        <span class="music-note note9" draggable="true">🪇</span>
 {% endblock %}

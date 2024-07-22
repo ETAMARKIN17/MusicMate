@@ -13,7 +13,7 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 BASE_URL = 'https://api.spotify.com/v1/'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
-REDIRECT_URI = 'https://albumrichard-careerapple-5000.codio.io/callback'  # Change based on where you're hosting webiste
+REDIRECT_URI = 'https://bogartsquare-bankbaboon-5000.codio.io/callback'  # Change based on where you're hosting webiste
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 
@@ -94,6 +94,7 @@ def get_user_playlists():
     }
 
     response = requests.get(BASE_URL + 'me/playlists', headers=headers)
+    print(response)
     return response.json().get('items', [])
 
 

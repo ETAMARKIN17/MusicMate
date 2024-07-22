@@ -3,7 +3,7 @@
 {% block title %}Matching Songs{% endblock %}
 
 {% block content %}
-
+<div class="scrollable-container">
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
             <div class="flash-messages">
@@ -14,7 +14,7 @@
         {% endif %}
     {% endwith %}
 
-    <h1>Here's what we got:</h1>
+    <h1>Here's your song recommendations:</h1>
 
     {% if mood %}
         <h2>Matching Songs for {{ mood }} Mood</h2>
@@ -25,32 +25,40 @@
         <h2>Matching Similar Songs to {{ original_song }}</h2>
     {% endif %}
 
-    <ul>
+    <div class="songs-grid">
         {% for key, song in songs.items() %}
-            <li>{{ song['song_name'] }} by {{ song['artist_name'] }} from the album {{ song['album_name'] }}
-            <br>
-            <a href="{{ song['song_link'] }}" target="_blank">Listen on Spotify</a>
-            <form class="save-song-form" data-song-id="{{ key }}" action="{{ url_for('song_matches') }}" method="POST">
-              <input type="hidden" name="song_index" value="{{ key }}">
-              <input type="hidden" name="song_name" value="{{ song['song_name'] }}">
-              <input type="hidden" name="artist_name" value="{{ song['artist_name'] }}">
-              <input type="hidden" name="album_name" value="{{ song['album_name'] }}">
-              <input type="hidden" name="song_link" value="{{ song['song_link'] }}">
-              <input type="hidden" name="uri" value="{{ song['uri'] }}">
-              <button type="submit" class="btn btn-primary save-song-button">Save Song</button>
-            </form>
-            </li>
+            <div class="song-item">
+                <img src="{{ song['album_cover'] }}" alt="Album cover for {{ song['album_name'] }}" class="album-cover">
+                <div class="song-info">
+                    <p>{{ song['song_name'] }} by {{ song['artist_name'] }}<br>
+                    from the album {{ song['album_name'] }}</p>
+                    <a href="{{ song['song_link'] }}" target="_blank">Listen on Spotify</a>
+                    <form class="save-song-form" data-song-id="{{ key }}" action="{{ url_for('song_matches') }}" method="POST">
+                        <input type="hidden" name="song_index" value="{{ key }}">
+                        <input type="hidden" name="song_name" value="{{ song['song_name'] }}">
+                        <input type="hidden" name="artist_name" value="{{ song['artist_name'] }}">
+                        <input type="hidden" name="album_name" value="{{ song['album_name'] }}">
+                        <input type="hidden" name="album_cover" value="{{ song['album_cover'] }}">
+                        <input type="hidden" name="song_link" value="{{ song['song_link'] }}">
+                        <input type="hidden" name="uri" value="{{ song['uri'] }}">
+                        <button type="submit" class="btn btn-primary save-song-button">Save Song</button>
+                    </form>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 
     {% if mood %}
+    <div class="center-text">
         <a href="{{ url_for('match_the_mood_info') }}">Change the parameters</a><br>
     {% elif activity and city and weather_stats %}
+    <div class="center-text">
         <a href="{{ url_for('match_the_day_info') }}">Change the parameters</a><br>
     {% elif original_song %}
+    <div class="center-text">
         <a href="{{ url_for('match_the_song_info') }}">Change the parameters</a><br>
     {% endif %}
-    <a href="{{ url_for('discover') }}">Change the feature</a><br>
+    <div class="center-text">
     <a href="{{ url_for('saved_songs') }}">View Saved Songs</a><br>
     <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
 
@@ -83,4 +91,5 @@
             });
         });
     </script>
+</div>
 {% endblock %}

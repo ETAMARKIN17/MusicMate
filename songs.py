@@ -77,12 +77,14 @@ def get_similar(song, limit):
         artist_name = item['artists'][0]['name']
         album_name = item['album']['name']
         song_link = item['external_urls']['spotify']
+        album_cover = item['album']['images'][0]['url'] if item['album']['images'] else None
         uri = item['uri']
         songs_dict[i + 1] = {
-            "song_name": song_name,
+             "song_name": song_name,
             "artist_name": artist_name,
             "album_name": album_name,
             "song_link": song_link,
+            "album_cover": album_cover,
             "uri": uri
         }
 
