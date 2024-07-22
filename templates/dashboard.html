@@ -3,23 +3,49 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1 class="top-center-text">Welcome, {{ user.username }}!</h1>
+    <h1 class="top-center-text-header">Welcome, {{ user.username }}!</h1>
 
-    <!-- Update with new styling! -->
-    <a href="{{ url_for('get_spotify_info') }}">Login with Spotify</a>
-
-    <div class="dashboard">
-        <div class="feature-magnify">
-            <img src="{{ url_for('static', filename='images/magnify.jpg') }}" alt="Discover New Songs">
-            <a href="{{ url_for('discover') }}" class="btn btn-custom btn-lg">Discover New Songs</a>
+    <div class="feature text-align-left">
+        <div class="feature-header">
+            <h2>Match The Day</h2>
+            <div class="button-container-day">
+                <a href="{{ url_for('match_the_day_info') }}" class="btn btn-custom">🌤️</a>
+            </div>
         </div>
-        <div class="feature-heart">
-            <img src="{{ url_for('static', filename='images/heart.jpg') }}" alt="View Saved Songs">
-            <a href="{{ url_for('saved_songs') }}" class="btn btn-custom btn-lg">View Saved Songs</a>
-        </div>
+        <p>Find the perfect songs for your day! Just tell us what you're up to and where you are, and we'll match your vibe with the perfect soundtrack to suit your scene. 
+            <br> Just hit play and discover the songs to fit the day!</p>
     </div>
 
-    <div class="bottom-center-text">
-        <a href="{{ url_for('logout') }}" class="btn btn-custom btn-lg">Logout</a>
+    <div class="feature text-align-left">
+        <div class="feature-header">
+            <h2>Match The Mood</h2>
+            <div class="button-container-mood">
+                <a href="{{ url_for('match_the_mood_info') }}" class="btn btn-custom">🫠</a>
+            </div>
+        </div>
+        <p>Feeling a certain way? Happy, sad, tired, or even a bit angry—no matter your mood, we got you covered. Let us find the perfect tunes to match your feelings and lift your spirits. 
+            <br> Your mood, your music, your choice.</p>
+    </div>
+
+    <div class="feature text-align-left">
+        <div class="feature-header">
+            <h2>Match The Song</h2>
+            <div class="button-container-song">
+                <a href="{{ url_for('match_the_song_info') }}" class="btn btn-custom">🎵</a>
+            </div>
+        </div>
+        <p>Got a favorite track you can't stop playing? Tell us what it is, and we'll dive deep to find songs with that same irresistible vibe. Discover new hits that perfectly complement your favorite tunes! 
+            <br> Discover your favorite songs ... again!</p>
+    </div>
+
+    <div class="feature text-align-left">
+        <div class="feature-header">
+            <h2>Saved Songs</h2>
+            <div class="button-container-saved">
+                <a href="{{ url_for('saved_songs') }}" class="btn btn-custom">🩵</a>
+            </div>
+        </div>
+        <p>Check out all the songs you've saved and easily browse and listen to your favorite tracks. Plus, you can create Spotify playlists directly from your saved collection!
+            <br> From saved to played, enjoy all your personal favorites in one place.</p>
     </div>
 {% endblock %}

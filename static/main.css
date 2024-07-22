@@ -27,15 +27,12 @@ body {
 
 .container {
     background: rgba(0, 0, 0, 0.6); 
-    padding: 0;
+    padding: 20px;
     border-radius: 10px;
     color: white; 
-    max-width: 1000px;
-    max-height: 800px;
+    max-width: 800px;
     text-align: center;
-    margin-top: 100px; 
-    margin-left: auto;
-    margin-right: auto;
+    margin: 100px auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -49,60 +46,67 @@ h1 {
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); 
 }
 
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0px;
+    color: black;
+}
+
+p{
+    font-size: 1.1rem;
+}
+
+.feature {
+    margin-bottom: 30px;
+}
+
+.feature-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.button-container-day {
+    margin-right: 1430px;
+}
+
+.button-container-mood {
+    margin-right: 1410px;
+}
+
+.button-container-song {
+    margin-right: 1415px;
+}
+
+.button-container-saved {
+    margin-right: 1455px;
+}
+
 .btn-custom {
-    margin: 10px 0;
+    margin: 5px 0;
     color: white;
-    background-color: rgba(0,0,0,0.4);
-    font-size: 1.2rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    font-size: 1.4rem;
+    display: inline-block;
 }
 
 .btn-custom:hover {
     color: white;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
-.top-center-text {
+.top-center-text-header {
     text-align: center;
-    margin-top: 250px;
+    margin-bottom: 50px;
+    margin-top: 0px;
+    color: white;
 }
 
-.dashboard {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    flex: 1;
-    margin: 0 550px; 
+.text-align-left {
+    text-align: left;
+    margin-left: 20px;
 }
 
-.feature {
+.text-align-center {
     text-align: center;
-    margin: 0 80px; 
-}
-
-.feature-magnify img {
-    max-width: 100px;
-    height: auto;
-    border-radius: 10px;
-    display: block;
-    margin: 0 auto;
-}
-
-.feature-heart img {
-    max-width: 125px;
-    height: auto;
-    border-radius: 10px;
-    display: block;
-    margin: 0 auto;
-}
-
-.feature a {
-    display: block;
-    margin-top: 10px;
-}
-
-
-.bottom-center-text {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 200px;
 }
