@@ -13,13 +13,14 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 BASE_URL = 'https://api.spotify.com/v1/'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
-REDIRECT_URI = 'https://armanisilk-memberavenue-5000.codio.io/callback'  # Change based on where you're hosting webiste
+REDIRECT_URI = 'https://albumrichard-careerapple-5000.codio.io/callback'  # Change based on where you're hosting webiste
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 
 # Called in the dashboard page, probably going to redirect to spotifys auth page and get all the stuff we need to make our api calls
 def get_spotify_auth_url():
-    scope = 'playlist-modify-public playlist-modify-private'
+    scope = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private'
+    #playlist-read-private
 
     params = {
         'client_id': SPOTIFY_CLIENT_ID,
@@ -36,7 +37,7 @@ def get_spotify_auth_url():
 
 def get_token_info(auth_code):
     request_body = {
-        'code': request.args['code'],
+        'code': auth_code,
         'grant_type': 'authorization_code',
         'redirect_uri': REDIRECT_URI,
         'client_id': SPOTIFY_CLIENT_ID,
@@ -94,7 +95,15 @@ def get_user_playlists():
     }
 
     response = requests.get(BASE_URL + 'me/playlists', headers=headers)
-    return response.json().get('items', [])
+    #print('actually changed')
+    # Log additional information for debugging
+    #print(session['access_token'])
+    
+    if response.status_code == 200:
+        return response.json().get('items', [])
+    else:
+        return {"error": response.json().get('error', 'Unknown error occurred')}
+
 
 
 def create_playlist_helper(name, description, public):
