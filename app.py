@@ -103,13 +103,6 @@ def dashboard():
     return render_template('dashboard.html', user=user)
 
 
-# Route to access the features page
-@app.route('/discover')
-@login_required
-def discover():
-    return render_template('discover.html')
-
-
 # Route for collecting information for the match the day feature
 @app.route('/match_the_day_info', methods=['GET', 'POST'])
 @login_required

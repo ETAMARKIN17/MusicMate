@@ -44,15 +44,14 @@
     </ul>
 
     {% if mood %}
-        <a href="{{ url_for('match_the_mood_info') }}">Change the parameters</a><br>
+        <a href="{{ url_for('match_the_mood_info') }}">Change the mood or genre</a><br>
     {% elif activity and city and weather_stats %}
-        <a href="{{ url_for('match_the_day_info') }}">Change the parameters</a><br>
+        <a href="{{ url_for('match_the_day_info') }}">Change the city, activity, or genre</a><br>
     {% elif original_song %}
-        <a href="{{ url_for('match_the_song_info') }}">Change the parameters</a><br>
+        <a href="{{ url_for('match_the_song_info') }}">Change the song</a><br>
     {% endif %}
-    <a href="{{ url_for('discover') }}">Change the feature</a><br>
+    <a href="{{ url_for('dashboard') }}">Back to dashboard</a><br>
     <a href="{{ url_for('saved_songs') }}">View Saved Songs</a><br>
-    <a href="{{ url_for('dashboard') }}">Back to dashboard</a>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
