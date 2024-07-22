@@ -2,9 +2,6 @@ import sqlite3
 from dotenv import load_dotenv
 import os
 from songs import *
-
-
-# Load environment variables from .env file
 load_dotenv()
 
 
@@ -25,6 +22,7 @@ def create_saved_songs_table():
                    artist_name TEXT NOT NULL,
                    album_name TEXT,
                    song_link TEXT NOT NULL,
+                   uri TEXT NOT NULL,
                    user_id INTEGER,
                    FOREIGN KEY (user_id) REFERENCES users(user_id)
                )''')
@@ -33,12 +31,12 @@ def create_saved_songs_table():
 
 
 # Function to save a song for a user
-def save_song(user_id, song_name, artist_name, album_name, song_link):
+def save_song(user_id, song_name, artist_name, album_name, song_link, uri):
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        c.execute('''INSERT INTO saved_songs (song_name, artist_name, album_name, song_link, user_id)
-                     VALUES (?, ?, ?, ?, ?)''', (song_name, artist_name, album_name, song_link, user_id))
+        c.execute('''INSERT INTO saved_songs (song_name, artist_name, album_name, song_link, uri, user_id)
+                     VALUES (?, ?, ?, ?, ?, ?)''', (song_name, artist_name, album_name, song_link, uri, user_id))
         conn.commit()
         song_id = c.lastrowid
         conn.close()
@@ -73,5 +71,21 @@ def delete_saved_song_by_id(user_id, song_id):
         return False
 
 
+# Create playlists table if not exists
+def create_playlists_table():
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS playlists (
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   playlist_id TEXT NOT NULL,
+                   playlist_name TEXT NOT NULL,
+                   user_id INTEGER,
+                   FOREIGN KEY (user_id) REFERENCES users(user_id)
+               )''')
+    conn.commit()
+    conn.close()
+
+
 # Call this function once to create the table if it doesn't exist
-create_saved_songs_table()
+if __name__ == "__main__":
+    create_saved_songs_table()
