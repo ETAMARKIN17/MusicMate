@@ -36,18 +36,11 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #ffffff; 
-}
-
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    font-weight: 600;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); 
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     margin-bottom: 0px;
     color: black;
 }
@@ -67,19 +60,19 @@ p{
 }
 
 .button-container-day {
-    margin-right: 1430px;
+    margin-right: 1465px;
 }
 
 .button-container-mood {
-    margin-right: 1410px;
+    margin-right: 1445px;
 }
 
 .button-container-song {
-    margin-right: 1415px;
+    margin-right: 1450px;
 }
 
 .button-container-saved {
-    margin-right: 1455px;
+    margin-right: 1485px;
 }
 
 .btn-custom {
@@ -110,3 +103,18 @@ p{
 .text-align-center {
     text-align: center;
 }
+
+@media (max-width: 1440px) {
+   .button-container-day {
+    margin-right: 1100px;
+    }
+    .button-container-mood {
+        margin-right: 1100px;
+    }
+    .button-container-song {
+        margin-right: 1100px;
+    }
+    .button-container-saved {
+        margin-right: 1100px;
+    }
+} 
