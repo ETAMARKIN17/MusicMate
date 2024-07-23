@@ -8,4 +8,4 @@ from songs import *  # Import functions from songs.py
 
 # Get similar songs feature
 def get_similar_songs(song):
-    return get_similar(song, limit=5)  # just returns song dict to be used for match_the_mood.html
+    return get_similar(song, limit=6)  # just returns song dict to be used for match_the_mood.html

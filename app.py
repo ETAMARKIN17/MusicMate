@@ -105,7 +105,7 @@ def dashboard():
 
 
 # Route for collecting information for the match the day feature
-@app.route('/match_the_day_info', methods=['GET', 'POST'])
+@app.route('/match_the_day_info', methods=['GET', 'POST'])  # Still throws error if given bad city
 @login_required
 @spotify_login_required
 def match_the_day_info():
@@ -204,6 +204,7 @@ def song_matches():  # make this reusable to display similar songs and mood song
         else:
             return {"status": "error", "message": "Song failed to save. Please try again"}, 500
 
+    # The following code just grab's the page we came from so that we can redirect the user to it
     previous_page = session.get('previous_page')
     if previous_page == 'match_the_day_info':
         city = session.get('city')

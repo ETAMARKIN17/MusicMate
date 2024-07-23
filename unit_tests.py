@@ -10,7 +10,6 @@ from user_accounts import *
 
 
 class UnitTests(unittest.TestCase):
-
     @patch('get_spotify_api_key.requests.post')
     def test_get_spotify_api_key(self, mock_post):
         mock_response = MagicMock()
@@ -19,6 +18,7 @@ class UnitTests(unittest.TestCase):
 
         token = get_spotify_api_key()
         self.assertEqual(token, "test_token")
+
 
     @patch('match_the_day.requests.get')
     def test_weather_forecast(self, mock_get):
@@ -33,6 +33,7 @@ class UnitTests(unittest.TestCase):
         result = weather_forecast("New York", "fake_api_key")
         self.assertEqual(result, ((75, "Sunny"), "New York"))
 
+
     @patch('match_the_day.weather_forecast')
     @patch('match_the_day.gpt_query_words')
     @patch('match_the_day.recommend_songs')
@@ -45,6 +46,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(result, {"song1": "details"})
         self.assertEqual(weather_stats, (75, "Sunny"))
 
+
     @patch('match_the_mood.gpt_query_words_mood')
     @patch('match_the_mood.recommend_songs')
     def test_get_songs_from_mood(self, mock_recommend_songs, mock_gpt_query_words_mood):
@@ -55,6 +57,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(result, {"song1": "details"})
         self.assertEqual(mood, "happy")
 
+
     @patch('match_the_song.get_similar')
     def test_get_similar_songs(self, mock_get_similar):
         mock_get_similar.return_value = {"song1": "details"}
@@ -62,14 +65,16 @@ class UnitTests(unittest.TestCase):
         result = get_similar_songs("test_song")
         self.assertEqual(result, {"song1": "details"})
 
+
     @patch('songs.get_playlist_from_spotify')
     def test_get_songs_from_playlist(self, mock_get_playlist_from_spotify):
         mock_get_playlist_from_spotify.return_value = [
-            {"track": {"name": "song1", "artists": [{"name": "artist1"}], "album": {"name": "album1", "images": [{"url": "link"}]}, "external_urls": {"spotify": "link"}, "popularity": 50}}
+            {"track": {"name": "song1", "artists": [{"name": "artist1"}], "album": {"name": "album1", "images": [{"url": "link"}]}, "external_urls": {"spotify": "link"}, "popularity": 50, "uri":1}}
         ]
 
         result = get_songs_from_playlist("pop", mock_get_playlist_from_spotify.return_value)
         self.assertEqual(result[1]["song_name"], "song1")
+
 
     def test_hash_password(self):
         password = "password123"
