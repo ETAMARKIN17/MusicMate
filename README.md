@@ -1,10 +1,16 @@
-# NEED TO FIX ALL OF THIS WHEN WE ARE CLOSER TO FINISHING!!!!!!!
-Welcome to WeatherTunes, where you can discover the perfect soundtrack for your day based on the weather and your activities!
+# MusicMate ♫
+Welcome to MusicMate, your go-to app for discovering the perfect soundtrack based on your day, mood, or even a specific song! MusicMate offers three main features:
+1. Match the Day: Discover songs that fit the weather and activity of your day.
+2. Match the Mood: Find songs that align with your current mood.
+3. Match the Song: Get recommendations based on a song you input.
+* You can also save your favorite songs and manage your Spotify playlists directly through MusicMate.
 
 ### Table of Contents
 - [Setup Instructions](#set-up-instructions)
 - [How to Run the Code](#how-to-run-the-code)
-- [Overview of the Code](#overview-of-the-code)
+- [Code Overview](#code-overview)
+- [Testing Information](#testing-information)
+- [Acknowledgments](#Acknowledgments)
 
 ### Set Up Instructions
 #### Prerequisites:
@@ -14,40 +20,34 @@ Before you begin, ensure you have the following installed:
 * sqlalchemy library
 * openai library
 * os library
-* pandas library
-* To install:
+* dotenv library
+* To install these dependencies, run:
     * ```python
-      pip install requests sqlalchemy pandas os openai
+      pip install requests sqlalchemy openai dotenv
       ```
 
+#### Setting Up Environment Variables:
+##### You need the following API keys:
+* GPT_API_KEY=your_openai_api_key
+* SPOTIFY_CLIENT_ID=your_spotify_client_id
+* SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
 
-#### Setting Up The Repository:
-    **Set up environment variables**
-        * Obtain an API key from the Google Developer website for the YouTube Data API.
-        * Set the API_KEY variable in your code with this obtained key.
+Set these variables in your environment. The code will automatically create an SQL database to store all necessary information once it is run.
+
 
 ### How To Run The Code
 1. **Run the script**
     * ```python
-      python3 weather_tunes.py
+      python3 app.py
       ```
-2. **Follow the prompts**
-    * Enter a location when asked
-      * Type y(yes) or n(no) if you see the correct city
-    * Enter your activity, feel free to be descriptive! 
+2. **Enjoy and interact with the website**
+    - Follow the prompts to explore MusicMate's features and enjoy the personalized music experience.
 
-3. **Check the output**
-    * Decide what genre you're feeling!
-        * Confused? respond with y to get the list of genres
-    * Decide if you want the extended or basic song info
-    * Finally, either decide your done or search through all the genres!
-
-### Overview Of The Code
+### Code Overview
 1. #### Imports:
     * **requests:** To make HTTP requests to the all the API's
     * **sqlalchemy:** To interact with the SQLite database.
-    * **pandas:** To handle data manipulation and storage.  
-     * **openai:** To interact with openai's api and get song keywords  
+    * **openai:** To interact with openai's api and get song keywords  
 
 
 2. #### Constants:
@@ -56,52 +56,34 @@ Before you begin, ensure you have the following installed:
     * **GPT_API_KEY:** Chat GPT API key.  
 
 
-3. #### Functions:
-    * weather_tunes.py:
-        * **welcome_user():** Prints out a pretty welcoming message.
-        * **weather_forecast():** Until correct location is confirmed, asks user for their desired location,
-        returns temp in farenheit, weather description (e.g. Partly Cloudy), and name of location.  
-        * **users_activity():** Until the user enters a valid activity (less than 50 characters), prompts user to
-        enter in their activity, returns this as string.  
-        * **get_query_words():** Asks the Chat GPT API for some keywords based on the weather and user's 
-        desired activity, returns these keywords as a string.  
-        * **get_songs_from_genre():** After database is created, prompts user for their desired genre, ensuring
-        they enter in a valid genre and providing a list of genres to help. Returns a list of song info stored 
-        in tuples.
-        * **show_genre_list():** Includes logic for asking user if they'd like to see the list of genres,
-        a helper called by other functions. 
-        * **list_of_genres():** Returns the list of genres stored in spotify_genres.py. 
-        * **final_response(activity, city, weather_stats, songs):** Presents the songs from desired genre with 
-        some pretty emoji's, and ensures user can ask to investigate songs from another genre if they want. 
-    * genre_database.py:
-        * **create_db(query_words):** Uses Chat GPT's activity words to send a GET request to Spotify API, adds
-        this info to a dictionary where each value represents a song's info. Calls the following function to 
-        add this dict to the database as a table 
-        * **dict_to_table():** Simply uses pandas to take the provided dictionary and turn it into a table in
-        our database. 
+3. #### File Rundown:
+    * app.py
+        * Handles all flask logic and routing for the web app 
+    * decorators.py
+        * Decorators for ensuring the user is logged into the site and to Spotify before accessing different functionalities
+    * get_spotify_api_key.py
+        * Holds all functions to handle Spotify integration and getting the proper access
+    * match_the_day.py
+        * Holds all functionality for the match the day feature
+    * match_the_mood.py
+        * Holds all functionality for the match the mood feature
+    * match_the_song.py
+        * Holds all functionality for the match the song feature
+    * playlist_feature.py
+        * Handles logic with integrating the users Spotify playlist for in-site adding and modifying the playlists
+    * save_songs.py
+        * All logic for saving songs by using a SQL database to store users and their songs
+    * songs.py
+        * Handles the logic for retrieving, storing, and displaying the current song data form either a Spotify playlist or track
+    * unit_tests.py
+        * Integrated with YAML auto check to automatically run the unit tests on every push.
+    * user_accounts.py
+        * All logic to handle the creation and storing of user accounts using a SQL database
 
-  
-4. #### Main Logic:
-    * Prompts the user for a location
-    * Sends a GET request to weather API to find some info about this location's weather
-    * Prompts the user for the activity they will be doing
-    * Asks openai API for some keywords based on the users activity and weather
-    * Sends a GET request to Spotify API to find songs matching these keywords in different genres
-    * Creates a database
-    * Stores the songs retrieved for every genre in a database (each genre as a table)
-    * Continually asks user which genre they'd like to see, returning song info after
-    a correct genre name has been answered
-    * Does this by querying the database to ask if the user-inputted genre is a table in it
-    * Stops returning when user wishes to 
+### Testing Information
+- **To test the application, use the following Spotify account:**
+    - Email: testmusicmateapp@gmail.com
+    - Password: 1234567abc
 
-
-5. #### Error Handling:
-    * Ensures correct weather location entered
-    * Ensures no bogus genres can be entered
-    * Doesn't allow activity description over 50 characters to avoid comprehension errors
-
-
-Test account Spotify Login:
-email: testmusicmateapp@gmail.com
-pass: 1234567abc
-
+### Acknowledgments
+This project was developed as part of the SEO Tech Developer Program as the final project in the summer of 2024. The development team includes Elliott Tamarkin, Doug Bogle, and Charlize Aponte. We hope you enjoy using MusicMate!
