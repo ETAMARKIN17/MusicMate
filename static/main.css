@@ -60,7 +60,12 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #ffffff; 
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0px;
+    color: black;
 }
 
 .text-white {
@@ -150,6 +155,21 @@ p{
 .text-align-center {
     text-align: center;
 }
+
+@media (max-width: 1440px) {
+   .button-container-day {
+    margin-right: 1100px;
+    }
+    .button-container-mood {
+        margin-right: 1100px;
+    }
+    .button-container-song {
+        margin-right: 1100px;
+    }
+    .button-container-saved {
+        margin-right: 1100px;
+    }
+} 
 
 /* Saved Songs Page Styles */
 .saved-songs-header {
