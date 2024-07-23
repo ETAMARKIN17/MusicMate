@@ -100,3 +100,8 @@ Before you begin, ensure you have the following installed:
     * Ensures no bogus genres can be entered
     * Doesn't allow activity description over 50 characters to avoid comprehension errors
 
+
+Test account Spotify Login:
+email: testmusicmateapp@gmail.com
+pass: 1234567abc
+

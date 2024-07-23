@@ -17,10 +17,9 @@ REDIRECT_URI = 'https://armanisilk-memberavenue-5000.codio.io/callback'  # Chang
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 
-# Called in the dashboard page, probably going to redirect to spotifys auth page and get all the stuff we need to make our api calls
+# Called after logging in, gets spotify's auth page url so user can grant us access
 def get_spotify_auth_url():
     scope = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private'
-    #playlist-read-private
 
     params = {
         'client_id': SPOTIFY_CLIENT_ID,
@@ -30,11 +29,11 @@ def get_spotify_auth_url():
         'show_dialog': True,
     }
 
-
     auth_url= f'{AUTH_URL}?{urllib.parse.urlencode(params)}'
     return auth_url
 
 
+# Part of OAuth process, helps us get the current user's access token
 def get_token_info(auth_code):
     request_body = {
         'code': auth_code,
@@ -47,6 +46,7 @@ def get_token_info(auth_code):
     return response.json()
 
 
+# Refreshes user's access token if it expires
 def refresh_token():
     if 'refresh_token' not in session:
         return redirect(url_for('dashboard'))
@@ -68,6 +68,7 @@ def refresh_token():
         return redirect(url_for('dashboard'))
 
 
+# Uses Spotify API's 'me' method to get info about current user, helps get their playlists
 def get_user_info():
     if 'access_token' not in session:
         return redirect(url_for('dashboard'))
@@ -83,6 +84,7 @@ def get_user_info():
     return response.json()
 
 
+# Specific function that grabs user's spotify playlists
 def get_user_playlists():
     if 'access_token' not in session:
         return None
@@ -95,9 +97,6 @@ def get_user_playlists():
     }
 
     response = requests.get(BASE_URL + 'me/playlists', headers=headers)
-    #print('actually changed')
-    # Log additional information for debugging
-    #print(session['access_token'])
     
     if response.status_code == 200:
         return response.json().get('items', [])
@@ -105,7 +104,7 @@ def get_user_playlists():
         return {"error": response.json().get('error', 'Unknown error occurred')}
 
 
-
+# Sends POST request to Spotify API to create a playlist from our webpage
 def create_playlist_helper(name, description, public):
     user_info = get_user_info()
     user_id = user_info['id']
@@ -131,6 +130,7 @@ def create_playlist_helper(name, description, public):
     return response.json()
 
 
+# Sends a POST request to Spotify API to add a song to a user's Spotify playlist
 def add_to_playlist_helper(playlist_id, track_uri):
     if 'access_token' not in session:
         return redirect(url_for('dashboard'))
