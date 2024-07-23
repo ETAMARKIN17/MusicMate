@@ -97,10 +97,11 @@ def get_user_playlists():
     }
 
     response = requests.get(BASE_URL + 'me/playlists', headers=headers)
-    
+
     if response.status_code == 200:
         return response.json().get('items', [])
     else:
+        print(response.txt)
         return {"error": response.json().get('error', 'Unknown error occurred')}
 
 

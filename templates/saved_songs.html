@@ -15,9 +15,10 @@
          <!-- Saved Songs Section, make it a column -->
         <div class="col-md-6 pr-2">
             <h2 class="text-center text-white btn-btm">Your Songs</h2>
+            <div class="scrollable-section">
                 {% if saved_songs %}
                     <ul class="list-group">
-                        {% for song in saved_songs %}
+                        {% for song in saved_songs | reverse %}
                             <li class="list-group-item d-flex justify-content-between">
                                 <div>
                                     <h5 class="saved-song-item">{{ song['song_name'] }}    
@@ -47,7 +48,8 @@
                                                     <button type="button" class="btn btn-danger btn-sm button-spacing" onclick="confirmDelete('{{ url_for('delete_saved_song', song_id=song['id']) }}')">Delete</button> <!-- Delete Button -->
                                                 </div>
                                         </form>
-                                </div>       
+                                </div>  
+                                     
                     </li>
                 {% endfor %}
             </ul>
@@ -55,10 +57,12 @@
             <p class="text-white">No saved songs yet.</p>
         {% endif %}
         </div>
+        </div>
 
         <!-- Playlists Section, another column -->
         <div class="col-md-6 pl-2">
         <h2 class ="text-center text-white btn-btm">Your Playlists</h2>
+        <div class="scrollable-section">
         {% if playlists %}
             <ul class="list-group mb-3">
                 {% for playlist in playlists %}
@@ -77,6 +81,7 @@
         {% endif %}
         </div>
         </div>
+        </div>
 
         <!-- Modal for Creating Playlist -->
         <div class="modal fade" id="createPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel" aria-hidden="true">
@@ -90,9 +95,13 @@
                     </div>
                     <div class="modal-body">
                         <form id="createPlaylistForm">
-                            <div class="form-group">
+                            <div class="form-group text-dark">
                                 <label for="playlistName">Playlist Name</label>
+
+                                <!-- Old box logic
                                 <input type="text" class="form-control" id="playlistName" name="name" required>
+                                -->
+                                <textarea class="form-control" id="playlistName" name="name"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="playlistDescription">Description</label>
