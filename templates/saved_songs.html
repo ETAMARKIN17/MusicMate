@@ -20,7 +20,7 @@
                         {% for song in saved_songs %}
                             <li class="list-group-item d-flex justify-content-between">
                                 <div>
-                                    <h5 class="song-item">{{ song['song_name'] }}    
+                                    <h5 class="saved-song-item">{{ song['song_name'] }}    
                                     {{ song['artist_name'] }}{% if song['album_name'] %} - {{ song['album_name'] }}{% endif %}</h5>
                                 
                                 
@@ -52,7 +52,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-dark">No saved songs yet.</p>
+            <p class="text-white">No saved songs yet.</p>
         {% endif %}
         </div>
 
