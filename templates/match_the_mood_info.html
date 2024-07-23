@@ -3,12 +3,14 @@
 {% block title %}Select info to fetch songs{% endblock %}
 
 {% block content %}
-    <h1>Info For Mood</h1>
+<div class="center-text">
+    <h1 class="text-header">Welcome to Match your Mood</h1>
+    <h2>Describe your Mood below!</h2>
     <form method="POST" action="{{ url_for('match_the_mood_info') }}">
-        <label for="city">Enter your mood, and why you're feeling that way if you'd like:</label><br>
-        <input type="text" id="mood" name="mood" placeholder="Enter mood" required><br><br>
+        <label for="city">Describe how you're feeling:</label><br>
+        <input type="text" class="styled-input" id="mood" name="mood" placeholder="Enter your mood" required><br><br>
 
-        <label for="genre">Select Genre:</label><br>
+        <label for="genre">Select a genre:</label><br>
         <select id="genre" name="genre" required>
             {% for genre in genres %}
                 <option value="{{ genre }}">{{ genre }}</option>
@@ -17,4 +19,13 @@
 
         <input type="submit" value="Get Songs">
     </form>
+    <span class="music-note note1" draggable="true">😀</span>
+        <span class="music-note note2" draggable="true">😍</span>
+        <span class="music-note note3" draggable="true">😎</span>
+        <span class="music-note note4" draggable="true">🥳</span>
+        <span class="music-note note5" draggable="true">😒</span>
+        <span class="music-note note6" draggable="true">😢</span>
+        <span class="music-note note7" draggable="true">🥺</span>
+        <span class="music-note note8" draggable="true">😡</span>
+        <span class="music-note note9" draggable="true">😐</span>
 {% endblock %}

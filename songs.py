@@ -30,6 +30,7 @@ def get_spotify_genres():
     return genres
 
 
+# Asks Spotify API for songs similar to the one given
 def get_similar(song, limit):
     SPOTIFY_API_KEY = get_spotify_token()
     headers = {"Authorization": f"Bearer {SPOTIFY_API_KEY}"}
@@ -50,9 +51,6 @@ def get_similar(song, limit):
          flash(f"Sorry, there was an error. Please try again. Error from Spotify API: {data['error']['message']}","error")
          return None 
        
-        
-
-    # pprint.pprint(data)
     song_id = data['tracks']['items'][0]['id']
 
 # SECOND API CALL, FINDING SONGS SIMILAR TO USER ENTERED SONG:
@@ -66,7 +64,6 @@ def get_similar(song, limit):
     data = response.json()
 
     if "error" in data:
-        # Handle API error response
         return None 
 
     songs_dict = {}
@@ -77,12 +74,14 @@ def get_similar(song, limit):
         artist_name = item['artists'][0]['name']
         album_name = item['album']['name']
         song_link = item['external_urls']['spotify']
+        album_cover = item['album']['images'][0]['url'] if item['album']['images'] else None
         uri = item['uri']
         songs_dict[i + 1] = {
-            "song_name": song_name,
+             "song_name": song_name,
             "artist_name": artist_name,
             "album_name": album_name,
             "song_link": song_link,
+            "album_cover": album_cover,
             "uri": uri
         }
 

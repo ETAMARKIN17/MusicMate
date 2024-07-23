@@ -13,6 +13,7 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 
 
+# Uses OpenAI API to get some query words based on a user's mood
 def gpt_query_words_mood(mood, api_key):
     client = OpenAI(api_key=api_key)
     completion = client.chat.completions.create(
@@ -25,17 +26,18 @@ def gpt_query_words_mood(mood, api_key):
     return completion.choices[0].message.content
 
 
+# Recommends *six* random songs from a playlist based on query words and genre
 def recommend_songs(query_words, genre):
     playlist = get_playlist_from_spotify(query_words, genre)
 
     songs = get_songs_from_playlist(genre, playlist)
 
     all_songs = list(songs.values())
-    random_5_songs = random.sample(all_songs, k=min(5, len(all_songs)))
+    random_5_songs = random.sample(all_songs, k=min(6, len(all_songs)))
 
-    random_5_songs_dict = {}
+    random_6_songs_dict = {}
     for i, song in enumerate(random_5_songs):
-        random_5_songs_dict[i + 1] = {
+        random_6_songs_dict[i + 1] = {
             "song_name": song["song_name"],
             "artist_name": song["artist_name"],
             "album_name": song["album_name"],
@@ -44,9 +46,10 @@ def recommend_songs(query_words, genre):
             "popularity": song["popularity"],
             "uri": song["uri"]
         }
-    return random_5_songs_dict
+    return random_6_songs_dict
 
 
+# Essentially the main function to utilize all the former functions
 def get_songs_from_mood(mood, genre):
     query_words = gpt_query_words_mood(mood, GPT_API_KEY)
     songs = recommend_songs(query_words, genre)
