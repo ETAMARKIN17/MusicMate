@@ -20,7 +20,6 @@ TOKEN_URL = 'https://accounts.spotify.com/api/token'
 # Called in the dashboard page, probably going to redirect to spotifys auth page and get all the stuff we need to make our api calls
 def get_spotify_auth_url():
     scope = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private'
-    #playlist-read-private
 
     params = {
         'client_id': SPOTIFY_CLIENT_ID,
@@ -29,7 +28,6 @@ def get_spotify_auth_url():
         'redirect_uri': REDIRECT_URI,
         'show_dialog': True,
     }
-
 
     auth_url= f'{AUTH_URL}?{urllib.parse.urlencode(params)}'
     return auth_url

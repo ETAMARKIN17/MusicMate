@@ -4,10 +4,11 @@ body {
     background-size: cover;
     background-position: center;
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    overflow: auto;
 }
 
 .navbar {
@@ -25,6 +26,17 @@ body {
     margin-top: 15px;
 }
 
+.custom-container {
+    background: rgba(71, 76, 78, 0.938); 
+    /* add/remove background for styling */
+    padding: 20px;
+    border-radius: 10px;
+    color: white; 
+    max-width: 800px;
+    text-align: center;
+    margin: 100px auto;
+}
+
 .container {
     background: rgba(0, 0, 0, 0.6); 
     padding: 20px;
@@ -39,6 +51,9 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff; 
 }
 
+.text-white {
+    color: #ffffff !important;
+}
 h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
@@ -67,19 +82,19 @@ p{
 }
 
 .button-container-day {
-    margin-right: 1430px;
+    margin-right: 1500px;
 }
 
 .button-container-mood {
-    margin-right: 1410px;
+    margin-right: 1500px;
 }
 
 .button-container-song {
-    margin-right: 1415px;
+    margin-right: 1500px;
 }
 
 .button-container-saved {
-    margin-right: 1455px;
+    margin-right: 1500px;
 }
 
 .btn-custom {
@@ -98,7 +113,7 @@ p{
 .top-center-text-header {
     text-align: center;
     margin-bottom: 50px;
-    margin-top: 0px;
+    margin-top: 100px;
     color: white;
 }
 
@@ -109,4 +124,90 @@ p{
 
 .text-align-center {
     text-align: center;
+}
+
+/* Saved Songs Page Styles */
+.saved-songs-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.saved-songs-container {
+    margin: 100px auto;
+    max-width: 1200px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Playlist Section */
+.playlist-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.playlist-item {
+    color: black;
+}
+
+/* Song Section */
+.song-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.song-item {
+    color: black;
+    text-align: center !important;
+}
+
+.saved-title {
+    color: white !important;
+}
+
+.btn-success {
+    margin-bottom: 10px; /* Space between Add to Playlist and Delete buttons */
+}
+
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers the buttons horizontally */
+    margin-top: .1rem;
+}
+
+.btn-btm {
+    margin-bottom: .8rem;
+}
+.mb-2 {
+    margin-bottom: 0.5rem; /* Adjust this value to control the space below the dropdown */
+}
+
+.button-spacing {
+    margin: .5rem;
+    
+}
+/* Responsive Adjustments */
+@media (max-width: 1440px) {
+   .button-container-day {
+    margin-right: 1100px;
+}
+
+.button-container-mood {
+    margin-right: 1100px;
+}
+
+.button-container-song {
+    margin-right: 1100px;
+}
+
+.button-container-saved {
+    margin-right: 1100px;
+}
 }
