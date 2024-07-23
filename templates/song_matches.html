@@ -4,15 +4,7 @@
 
 {% block content %}
 <div class="scrollable-container">
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+
 
     <h1 class ="text-header">Here's your song recommendations:</h1>
 
@@ -24,7 +16,16 @@
     {% elif original_song %}
         <h2>Matching Similar Songs to {{ original_song }}</h2>
     {% endif %} -->
-
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
     <div class="songs-grid">
         {% for key, song in songs.items() %}
             <div class="song-item">
