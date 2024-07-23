@@ -16,7 +16,7 @@ load_dotenv()
 
 # Initialize Flask application
 app = Flask(__name__)
-app.secret_key = os.getenv('FLASK_SECRET_KEY')
+app.secret_key = os.environ.get('FLASK_SECRET_KEY')
 
 
 # Route for home page
