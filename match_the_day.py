@@ -8,10 +8,10 @@ from songs import *  # Import functions from songs.py
 
 # Get API keys from environment variables
 load_dotenv()
-WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
-GPT_API_KEY = os.getenv('GPT_API_KEY')
-SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY')
+GPT_API_KEY = os.environ.get('GPT_API_KEY')
+SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 
 # Function to fetch weather forecast for a specified city
