@@ -1,6 +1,7 @@
 import requests
 import sys
-from get_spotify_api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+# Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+from get_spotify_api_key import *
 import urllib.parse
 from datetime import datetime
 from flask import Flask, redirect, request, session, url_for, jsonify
@@ -13,7 +14,8 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 BASE_URL = 'https://api.spotify.com/v1/'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
-REDIRECT_URI = 'https://MusicMate.pythonanywhere.com/callback'  # Change based on where you're hosting webiste
+# Change based on where you're hosting webiste
+REDIRECT_URI = 'https://MusicMate.pythonanywhere.com/callback'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 
@@ -29,7 +31,7 @@ def get_spotify_auth_url():
         'show_dialog': True,
     }
 
-    auth_url= f'{AUTH_URL}?{urllib.parse.urlencode(params)}'
+    auth_url = f'{AUTH_URL}?{urllib.parse.urlencode(params)}'
     return auth_url
 
 
@@ -63,7 +65,8 @@ def refresh_token():
         new_token_info = response.json()
 
         session['access_token'] = new_token_info['access_token']
-        session['expires_at'] = datetime.now().timestamp() + new_token_info['expires_in']
+        session['expires_at'] = datetime.now().timestamp() + \
+            new_token_info['expires_in']
 
         return redirect(url_for('dashboard'))
 
@@ -119,7 +122,7 @@ def create_playlist_helper(name, description, public):
     headers = {
         "Authorization": f"Bearer {session['access_token']}",
         "Content-Type": "application/json"
-        }
+    }
 
     data = {
         'name': name,
@@ -127,7 +130,8 @@ def create_playlist_helper(name, description, public):
         'public': public,
     }
 
-    response = requests.post(BASE_URL + f'users/{user_id}/playlists', headers=headers, json=data)
+    response = requests.post(
+        BASE_URL + f'users/{user_id}/playlists', headers=headers, json=data)
     return response.json()
 
 
@@ -142,13 +146,14 @@ def add_to_playlist_helper(playlist_id, track_uri):
     headers = {
         "Authorization": f"Bearer {session['access_token']}",
         "Content-Type": "application/json",
-        }
-    
+    }
+
     data = {
         'uris': [track_uri]
     }
 
-    response = requests.post(BASE_URL + f'playlists/{playlist_id}/tracks', headers=headers, json=data)
+    response = requests.post(
+        BASE_URL + f'playlists/{playlist_id}/tracks', headers=headers, json=data)
 
     print(track_uri)
     print(response.json())

@@ -61,7 +61,8 @@ def delete_saved_song_by_id(user_id, song_id):
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        c.execute("DELETE FROM saved_songs WHERE id=? AND user_id=?", (song_id, user_id))
+        c.execute("DELETE FROM saved_songs WHERE id=? AND user_id=?",
+                  (song_id, user_id))
         conn.commit()
         conn.close()
         return True

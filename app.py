@@ -72,13 +72,14 @@ def get_spotify_info():
 def callback():
     if 'error' in request.args:
         return jsonify({'error': request.args['error']})
-    
+
     if 'code' in request.args:
         token_info = get_token_info(request.args['code'])
 
         session['access_token'] = token_info['access_token']
         session['refresh_token'] = token_info['refresh_token']
-        session['expires_at'] = datetime.now().timestamp() + token_info['expires_in']
+        session['expires_at'] = datetime.now().timestamp() + \
+            token_info['expires_in']
 
         return redirect(url_for('dashboard'))
 
@@ -105,7 +106,8 @@ def dashboard():
 
 
 # Route for collecting information for the match the day feature
-@app.route('/match_the_day_info', methods=['GET', 'POST'])  # Still throws error if given bad city
+# Still throws error if given bad city
+@app.route('/match_the_day_info', methods=['GET', 'POST'])
 @login_required
 @spotify_login_required
 def match_the_day_info():
@@ -198,7 +200,8 @@ def song_matches():  # make this reusable to display similar songs and mood song
         song_link = request.form['song_link']
         uri = request.form['uri']
 
-        song_id = save_song(user_id, song_name, artist_name, album_name, song_link, uri)
+        song_id = save_song(user_id, song_name, artist_name,
+                            album_name, song_link, uri)
         if song_id:
             return {"status": "success", "message": "Song saved successfully"}, 200
         else:
@@ -233,8 +236,9 @@ def save_a_song():
         album_name = request.form['album_name']
         song_link = request.form['song_link']
         uri = request.form['uri']
-        
-        song_id = save_song(user_id, song_name, artist_name, album_name, song_link, uri)
+
+        song_id = save_song(user_id, song_name, artist_name,
+                            album_name, song_link, uri)
 
         if song_id:
             return {"status": "success", "message": "Song saved successfully"}, 200
@@ -243,7 +247,7 @@ def save_a_song():
 
 
 # Route for viewing saved songs
-@app.route('/saved_songs', methods=['POST','GET'])
+@app.route('/saved_songs', methods=['POST', 'GET'])
 @login_required
 @spotify_login_required
 def saved_songs():
@@ -273,7 +277,8 @@ def create_playlist():
     description = data.get('description', '')
     public = data.get('public', False)
 
-    response = create_playlist_helper(name, description, public)  # Uses Spotify API to create playlist for user
+    # Uses Spotify API to create playlist for user
+    response = create_playlist_helper(name, description, public)
     if 'id' in response:
         return jsonify({"success": True, "message": "Playlist created successfully"}), 200
     else:
@@ -288,7 +293,6 @@ def add_to_playlist():
     playlist_id = request.form.get('playlist_id')
     song_uri = request.form.get('song_uri')
 
-    
     result = add_to_playlist_helper(playlist_id, song_uri)
     if result:
         flash("Success.", "yay")
