@@ -21,7 +21,7 @@ TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 # Called after logging in, gets spotify's auth page url so user can grant us access
 def get_spotify_auth_url():
-    scope = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private'
+    scope = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-read-private'
 
     params = {
         'client_id': SPOTIFY_CLIENT_ID,
