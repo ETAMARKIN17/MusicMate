@@ -43,7 +43,8 @@ def register_user(username, password):
     c = conn.cursor()
     hashed_password = hash_password(password)
     try:
-        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
+        c.execute("INSERT INTO users (username, password) VALUES (?, ?)",
+                  (username, hashed_password))
         conn.commit()
         user_id = c.lastrowid
         conn.close()
@@ -58,7 +59,8 @@ def login_user(username_or_id, password):
     conn = get_db_connection()
     c = conn.cursor()
     hashed_password = hash_password(password)
-    c.execute("SELECT * FROM users WHERE (username=? OR user_id=?) AND password=?", (username_or_id, username_or_id, hashed_password))
+    c.execute("SELECT * FROM users WHERE (username=? OR user_id=?) AND password=?",
+              (username_or_id, username_or_id, hashed_password))
     user = c.fetchone()
     conn.close()
     return user

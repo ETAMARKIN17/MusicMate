@@ -15,7 +15,7 @@ SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 BASE_URL = 'https://api.spotify.com/v1/'
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 # Change based on where you're hosting webiste
-REDIRECT_URI = 'https://MusicMate.pythonanywhere.com/callback'
+REDIRECT_URI = 'https://musicmate.pythonanywhere.com/callback'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 

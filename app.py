@@ -1,3 +1,4 @@
+import git
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from dotenv import load_dotenv
 import os
@@ -82,6 +83,17 @@ def callback():
             token_info['expires_in']
 
         return redirect(url_for('dashboard'))
+
+
+@app.route("/update_server", methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/home/MusicMate/MusicMate')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 
 @app.route('/refresh_token')
