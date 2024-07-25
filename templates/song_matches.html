@@ -51,12 +51,15 @@
 
     {% if mood %}
     <div class="center-text">
+        <a href="#" onclick="location.reload(); return false;">Load more songs</a>
         <a href="{{ url_for('match_the_mood_info') }}">Change the parameters</a><br>
     {% elif activity and city and weather_stats %}
     <div class="center-text">
+        <a href="#" onclick="location.reload(); return false;">Load more songs</a>
         <a href="{{ url_for('match_the_day_info') }}">Change the parameters</a><br>
     {% elif original_song %}
     <div class="center-text">
+        <a href="#" onclick="location.reload(); return false;">Load more songs</a>
         <a href="{{ url_for('match_the_song_info') }}">Change the parameters</a><br>
     {% endif %}
     <div class="center-text">
