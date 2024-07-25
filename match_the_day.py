@@ -2,7 +2,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from get_spotify_api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+# Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+from get_spotify_api_key import *
 from songs import *  # Import functions from songs.py
 
 
@@ -30,7 +31,7 @@ def weather_forecast(city, api_key):
         print("Error, status code:", response.status_code)
         print("Please try again with a valid city name")
         return None
-        
+
 
 # Function to generate query words using GPT-3 based on weather, activity, and genre
 def gpt_query_words(weather_stats, activity, api_key):
@@ -39,7 +40,8 @@ def gpt_query_words(weather_stats, activity, api_key):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a spotify genius that specializes in finding the right playlist based off some information. Generate a list of 3 - 5 words or short phrases to use in the Spotify API search function to search for a playlist based on the given information."},
-            {"role": "user", "content": f"The weather is {weather_stats[0]} degrees and {weather_stats[1]} and the activity is {activity}."}
+            {"role": "user",
+                "content": f"The weather is {weather_stats[0]} degrees and {weather_stats[1]} and the activity is {activity}."}
         ]
     )
     return completion.choices[0].message.content
@@ -74,4 +76,5 @@ def get_songs_from_activity(city, activity, genre):
     query_words = gpt_query_words(weather_stats, activity, GPT_API_KEY)
     songs = recommend_songs(query_words, genre)
 
-    return songs, weather_stats  # get activity from session in app.py, use all this for match_the_mood.html
+    # get activity from session in app.py, use all this for match_the_mood.html
+    return songs, weather_stats

@@ -2,7 +2,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from get_spotify_api_key import *  # Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+# Imports SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET
+from get_spotify_api_key import *
 from songs import *  # Import functions from songs.py
 
 
@@ -20,7 +21,8 @@ def gpt_query_words_mood(mood, api_key):
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a spotify genius that specializes in finding the right playlist based off some information. Generate a list of 3 - 5 words or short phrases to use in the Spotify API search function to search for a playlist based on the given mood."},
-            {"role": "user", "content": f"I am feeling {mood}."}  # Consider changing to get better responses
+            # Consider changing to get better responses
+            {"role": "user", "content": f"I am feeling {mood}."}
         ]
     )
     return completion.choices[0].message.content
