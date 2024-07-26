@@ -86,4 +86,4 @@ Set these variables in your environment. The code will automatically create an S
     - Password: 1234567abc
 
 ### Acknowledgments
-This project was developed as part of the SEO Tech Developer Program as the final project in the summer of 2024. The development team includes Elliott Tamarkin, Doug Bogle, and Charlize Aponte. We hope you enjoy using MusicMate!
+This project was developed as part of the SEO Tech Developer Program as the final project in the summer of 2024. The development team includes Elliott Tamarkin, Doug Bogle, and Charlize Aponte. MusicMate won the Best System Architecture award for its group of presentations. We hope you enjoy using MusicMate!
